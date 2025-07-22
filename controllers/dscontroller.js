@@ -16,28 +16,22 @@ const dsController = async (req, res) => {
     }
   };
 
-  const candidateDetail = async (req, res) => {
-    const {link} = req.params
-    const detail = await JobForm.findOne({link})
-  
+  const candidateDetail = async (req, res) => { 
     try {
       const { link } = req.params;
-      const form = await JobForm.findOne(link);
-      if (!form) {
-        return res.status(404).render("errorPage", { message: "Candidate not found" });
-      }
+      const form = await JobForm.findOne({ link: link });
+      if (!form) return res.status(404).send("Candidate not found");
+      
       res.render("candidate-detail", {
         status: true,
-        message: "candidate-detail  page successfully loaded",
+        message: "Candidate-detail page successfully loaded",
         error: {},
-        data: {
-          detail
-        },
-        title: "candidate-detail Page",
-        
+        data: form,  
+        title: "Candidate Detail Page",
       });
+  
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.redirect("/error?error=" + error.message);
     }
   };
