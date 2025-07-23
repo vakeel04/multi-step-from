@@ -1,167 +1,247 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <title>Candidate Details</title>
-    <style>
-      ul,
-      li,
-      ol {
-        list-style: none;
-      }
 
-      .key,
-      .value {
-        font-weight: 500;
-        font-size: 17px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous" />
+  <title>Candidate Details</title>
+  <style>
+    ul,
+    li,
+    ol {
+      list-style: none;
+    }
 
-      .value {
-        margin-left: 6px;
-      }
+    .key,
+    .value {
+      font-weight: 500;
+      font-size: 17px;
+    }
 
-      li {
-        margin-top: 8px;
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      style="
+    .value {
+      margin-left: 6px;
+    }
+
+    li {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="
         background-image: url(&quot;https://img.freepik.com/free-vector/ombre-blue-curve-light-blue-background_53876-173299.jpg?semt=ais_hybrid&w=740&quot;);
         background-size: cover;
         height: 100px;
-      "
-    >
-      <h3 class="p-4">Onboarding Form</h3>
-    </div>
+      ">
+    <h3 class="p-4">Onboarding Form</h3>
+  </div>
 
-    <section class="py-5">
-      <div class="container">
-        <div>
-          <h4>Personal Details</h4>
+  <section class="py-5">
+    <div class="container">
+      <div>
+        <h4>Personal Details</h4>
 
-          <ul class="mt-3">
-            <li>
-              <span class="key">Full Name: </span>
-              <span class="value">Tony Stark</span>
-            </li>
-            <li>
-              <span class="key"> Father's Name: </span>
-              <span class="value">Jhon Stark</span>
-            </li>
+        <ul class="mt-3">
+          <li>
+            <span class="key">Full Name: </span>
+            <span class="value">
+              <%= data?.form?.fullName%>
+            </span>
+          </li>
+          <li>
+            <span class="key"> Father's Name: </span>
+            <span class="value">
+              <%= data?.form?.fatherName%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> Mother's Name: </span>
-              <span class="value">Jane Stark</span>
-            </li>
+          <li>
+            <span class="key"> Mother's Name: </span>
+            <span class="value">
+              <%= data?.form?.motherName%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> Email Address: </span>
-              <span class="value">tony@gmail.com</span>
-            </li>
+          <li>
+            <span class="key"> Email Address: </span>
+            <span class="value">
+              <%= data?.form?.email%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> Mobile Number: </span>
-              <span class="value">+91 7346454674</span>
-            </li>
+          <li>
+            <span class="key"> Mobile Number: </span>
+            <span class="value">
+              <%= data?.form?.number%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> Alternate Mobile Number: </span>
-              <span class="value">+91 7346454674</span>
-            </li>
+          <li>
+            <span class="key"> Alternate Mobile Number: </span>
+            <span class="value">
+              <%= data?.form?.AlternateNumber%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> Father's Mobile Number: </span>
-              <span class="value">+91 7346454674</span>
-            </li>
-            <li>
-              <span class="key"> Mother's Mobile Number: </span>
-              <span class="value">+91 7346454674</span>
-            </li>
-            <li>
-              <span class="key"> Current Address:</span>
-              <span class="value">raamgarh mode jaipur rajasthan</span>
-            </li>
-            <li>
-              <span class="key"> City:</span>
-              <span class="value">jaipur</span>
-            </li>
-            <li>
-              <span class="key">Pincode: </span>
-              <span class="value">302012</span>
-            </li>
-            <h4 class="mt-4" style="margin-left: -32px">Permanent Address:</h4>
-            <li>
-              <span class="key">Permanent Address: </span>
-              <span class="value">raamgarh mode jaipur rajasthan</span>
-            </li>
+          <li>
+            <span class="key"> Father's Mobile Number: </span>
+            <span class="value">
+              <%= data?.form?.fatherNumber%>
+            </span>
+          </li>
+          <li>
+            <span class="key"> Mother's Mobile Number: </span>
+            <span class="value">
+              <%= data?.form?.motherNumber%>
+            </span>
+          </li>
+          <li>
+            <span class="key"> Current Address:</span>
+            <span class="value">
+              <%= data?.form?.currentAddress%>
+            </span>
+          </li>
+          <li>
+            <span class="key"> City:</span>
+            <span class="value">
+              <%= data?.form?.currentCity%>
+            </span>
+          </li>
+          <li>
+            <span class="key">Pincode: </span>
+            <span class="value">
+              <%= data?.form?.currentPincode%>
+            </span>
+          </li>
+          <h4 class="mt-4" style="margin-left: -32px">Permanent Address:</h4>
+          <li>
+            <span class="key">Permanent Address: </span>
+            <span class="value">
+              <%= data?.form?.permanentAddress%>
+            </span>
+          </li>
 
-            <li>
-              <span class="key"> City:</span>
-              <span class="value">jaipur</span>
-            </li>
-            <li>
-              <span class="key">Pincode: </span>
-              <span class="value">302012</span>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>Documents</h4>
-
-          <ul class="mt-3">
-            <li>
-              <span class="key">Pan Card Front:</span>
-              <a href="#" class="value">Download</a>
-            </li>
-
-            <li>
-              <span class="key">Pan Card Back: </span>
-              <a href="#" class="value">Download</a>
-            </li>
-
-            <li>
-              <span class="key">Aadhar Card Front:</span>
-              <a href="#" class="value">Download</a>
-            </li>
-
-            <li>
-              <span class="key">Aadhar Card Back: </span>
-              <a href="#" class="value">Download</a>
-            </li>
-            <li>
-              <span class="key">10th Marksheet:</span>
-              <a href="#" class="value">Download</a>
-            </li>
-            <li>
-              <span class="key"> 12th Marksheet: </span>
-              <a href="#" class="value">Download</a>
-            </li>
-
-            <li>
-              <span class="key">Last Qualification Marksheet:</span>
-              <a href="#" class="value">Download</a>
-            </li>
-            <li>
-              <span class="key">Last Qualification: </span>
-              <span class="value">2024</span>
-            </li>
-            <li>
-              <span class="key">Experience: </span>
-              <span class="value">Fresher</span>
-            </li>
-          </ul>
-        </div>
+          <li>
+            <span class="key"> City:</span>
+            <span class="value">
+              <%= data?.form?.permanentCity%>
+            </span>
+          </li>
+          <li>
+            <span class="key">Pincode: </span>
+            <span class="value">
+              <%= data?.form?.permanentPincode%>
+            </span>
+          </li>
+        </ul>
       </div>
-    </section>
-  </body>
+
+      <div>
+        <h4>Documents</h4>
+
+        <ul class="mt-3">
+          <li>
+            <span class="key">Pan Card Front:</span>
+            <a href="/<%= data.form.panFront %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.panFront %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">Pan Card Back:</span>
+            <a href="/<%= data.form.panBack %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.panBack %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">Aadhar Card Front:</span>
+            <a href="/<%= data.form.aadharFront %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.aadharFront %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">Aadhar Card Back:</span>
+            <a href="/<%= data.form.aadharBack %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.aadharBack %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">10th Marksheet:</span>
+            <a href="/<%= data.form.marksheet10 %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.marksheet10 %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">12th Marksheet:</span>
+            <a href="/<%= data.form.marksheet12 %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.marksheet12 %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">Last Qualification Marksheet:</span>
+            <a href="/<%= data.form.lastQualificationMarksheet %>" target="_blank"
+              class="btn btn-sm btn-primary">View</a>
+            <a href="/<%= data.form.lastQualificationMarksheet %>" download class="btn btn-sm btn-success">Download</a>
+          </li>
+
+          <li>
+            <span class="key">Last Qualification:</span>
+            <span class="value">
+              <%= data.form.lastQualification %>
+            </span>
+          </li>
+
+          <li>
+            <span class="key">Experience:</span>
+            <span class="value">
+              <% if (data.form.experienceType==="fresher" ) { %>
+                Fresher<br>
+                <% if (data.form.fresherCV) { %>
+                  <strong>Fresher CV:</strong>
+                  <a href="/<%= data.form.fresherCV %>" target="_blank" class="btn btn-sm btn-primary">View</a>
+                  <a href="/<%= data.form.fresherCV %>" download class="btn btn-sm btn-success">Download</a>
+                  <% } else { %>
+                    CV not uploaded
+                    <% } %>
+                      <% } else if (data.form.experienceType==="experienced" && data.form.experiences?.length> 0) { %>
+                        <% data.form.experiences.forEach((exp, index)=> { %>
+                          <div class="mb-2">
+                            <strong>Company:</strong>
+                            <%= exp.companyName %><br>
+                              <strong>Role:</strong>
+                              <%= exp.jobRole %><br>
+                                <strong>Location:</strong>
+                                <%= exp.location %><br>
+                                  <strong>Duration:</strong>
+                                  <%= exp.joiningDate ? new Date(exp.joiningDate).toDateString() : '' %> to
+                                    <%= exp.endDate ? new Date(exp.endDate).toDateString() : 'Present' %><br>
+                                      <strong>Total Experience:</strong>
+                                      <%= exp.totalExperience %>
+                          </div>
+                          <% if (index !==data.form.experiences.length - 1) { %>
+                            <hr>
+                            <% } %>
+                              <% }) %>
+
+                                <% if (data.form.resume) { %>
+                                  <strong>Resume:</strong>
+                                  <a href="/<%= data.form.resume %>" target="_blank"
+                                    class="btn btn-sm btn-primary">View</a>
+                                  <a href="/<%= data.form.resume %>" download
+                                    class="btn btn-sm btn-success">Download</a>
+                                  <% } %>
+                                    <% } else { %>
+                                      Not Specified
+                                      <% } %>
+            </span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </section>
+</body>
+
 </html>

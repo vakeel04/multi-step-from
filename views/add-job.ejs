@@ -88,7 +88,7 @@
             <div id="inputContainer">
               <div class="inputMain">
                 <label>Job Title</label> <br />
-                <input type="text"  name="jobTitle[]" class="border mt-1" />
+                <input type="text"  name="jobRole[]" class="border mt-1" />
               </div>
             </div>
 
@@ -136,8 +136,8 @@
                 <td><%= form.candidateName %></td>
                 <td><%= form.createdAt.toLocaleDateString("en-GB") %></td>
                 <td>
-                  <% if (form.jobTitle && form.jobTitle.length > 0) { %>
-                    <%= form.jobTitle.join(", ") %>
+                  <% if (Array.isArray(form.jobRole) && form.jobRole.length > 0) { %>
+                    <%= form.jobRole.join(", ") %>
                   <% } else { %>
                     N/A
                   <% } %>
@@ -177,7 +177,7 @@
     newInputDiv.className = "inputMain";
     newInputDiv.innerHTML = `
       <label>Job Title</label><br/>
-      <input type="text" name="jobTitle[]" class="border mt-1" />
+      <input type="text" name="jobRole[]" class="border mt-1" />
     `;
     container.appendChild(newInputDiv);
   }
@@ -194,7 +194,7 @@
     const candidateName = form.querySelector('input[name="candidateName"]').value;
     const logoFile = form.querySelector('input[name="logo"]').files[0];
 
-    const jobTitles = form.querySelectorAll('input[name="jobTitle[]"]');
+    const jobRoles = form.querySelectorAll('input[name="jobRole[]"]');
 
     formData.append("companyName", companyName);
     formData.append("candidateName", candidateName);
@@ -202,8 +202,8 @@
       formData.append("logo", logoFile);
     }
 
-    jobTitles.forEach((input) => {
-      formData.append("jobTitle", input.value); // Backend should accept array
+    jobRoles.forEach((input) => {
+      formData.append("jobRole", input.value); // Backend should accept array
     });
 
     try {

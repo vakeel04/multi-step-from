@@ -4,7 +4,7 @@ const jobSchema = new mongoose.Schema(
   {
     companyName: { type: String, required: true },
     logo: { type: String, required: true },
-    jobTitle: [{ type: String, required: true }],
+    jobRole: [{ type: String, required: true }],
     candidateName: { type: String, required: true },
     link: { type: String, required: true, unique: true }, 
   },

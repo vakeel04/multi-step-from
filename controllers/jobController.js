@@ -13,7 +13,7 @@ const createJob = async (req, res) => {
       ...req.body,
       link, // assign generated link
     };
- 
+    console.log("job role --->  ",req.body.jobRole)
     // console.log("file--",req.file)
     // console.log("body--",req.body)
     // console.log("payload--",payload)

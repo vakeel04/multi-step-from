@@ -21,12 +21,13 @@ const dsController = async (req, res) => {
       const { link } = req.params;
       const form = await JobForm.findOne({ link: link });
       if (!form) return res.status(404).send("Candidate not found");
-      
+      console.log("from---",form)
       res.render("candidate-detail", {
         status: true,
         message: "Candidate-detail page successfully loaded",
         error: {},
-        data: form,  
+        data: {
+          form },  
         title: "Candidate Detail Page",
       });
   

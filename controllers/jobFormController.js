@@ -1,11 +1,12 @@
 const JobForm = require("../models/jobFormModel");
-
+const Job = require("../models/jobModel");
 const createJobForm = async (req, res) => {
   try {
    const {link} =req.params 
-    const { email } = req.body;
-    const alreadyExists = await JobForm.findOne({ email });
-    if (alreadyExists) return res.status(409).send({ status: false, message: "Job Form already exists with this email." });
+    const isLinkValid =  await Job.findOne({ link:link });
+    if(!isLinkValid) return res.status(404).send({ status: false, message: "link is not valid." })
+    const alreadyExists = await JobForm.findOne({ link });
+    if (alreadyExists) return res.status(409).send({ status: false, message: "Job Form already exists with this link." });
 
   let experience =  {
     companyName : req.body.companyName,
