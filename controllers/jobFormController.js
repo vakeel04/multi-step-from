@@ -16,6 +16,7 @@ const createJobForm = async (req, res) => {
     endDate :  req.body.endDate,
     totalExperience: req.body.totalExperience,
   }
+  console.log("experience---",experience)
     // Handle file uploads from multer
     const files = req.files;
     const getFilePath = (name) => files?.[name]?.[0]?.path || '';
