@@ -100,7 +100,7 @@
       <div class="step active" id="step1">
         <h5>Step 1: Personal Details</h5>
         <div class="row">
- 
+
           <div class="col-md-12 col-12">
             <div class="form-group"><label>Full Name:</label><input type="text" name="fullName" required></div>
           </div>
@@ -113,21 +113,42 @@
           <div class="col-md-12 col-12">
             <div class="form-group"><label>Email Address:</label><input type="email" name="email" required></div>
           </div>
+          <!-- Mobile Number -->
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Mobile Number:</label><input type="tel" name="number" required></div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="form-group"><label>Alternate Mobile Number:</label><input type="tel" name="AlternateNumber">
+            <div class="form-group">
+              <label>Mobile Number:</label>
+              <input type="text" name="number" class="form-control" pattern="[6-9]{1}[0-9]{9}" minlength="10"
+                maxlength="10" required />
             </div>
           </div>
+
+          <!-- Alternate Mobile Number -->
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Father's Mobile Number:</label><input type="tel" name="fatherNumber"
-                required></div>
+            <div class="form-group">
+              <label>Alternate Mobile Number:</label>
+              <input type="text" name="AlternateNumber" class="form-control " pattern="[6-9]{1}[0-9]{9}" minlength="10"
+                maxlength="10" required />
+            </div>
           </div>
+
+          <!-- Father's Mobile Number -->
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Mother's Mobile Number:</label><input type="tel" name="motherNumber"
-                required></div>
+            <div class="form-group">
+              <label>Father's Mobile Number:</label>
+              <input type="text" name="fatherNumber" class="form-control " pattern="[6-9]{1}[0-9]{9}" minlength="10"
+                maxlength="10" required />
+            </div>
           </div>
+
+          <!-- Mother's Mobile Number -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Mother's Mobile Number:</label>
+              <input type="text" name="motherNumber" class="form-control" pattern="[6-9]{1}[0-9]{9}" minlength="10"
+                maxlength="10" required />
+            </div>
+          </div>
+
           <h5>Current Address</h5>
           <div class="col-md-12 col-12">
             <div class="form-group"><label>Current Address:</label><textarea name="currentAddress"></textarea></div>
@@ -245,10 +266,10 @@
         <div id="experiencedSection" style="display: none;">
           <div class="row">
             <div class="col-md-6 col-12">
-              <div class="form-group"><label>Company Name:</label><input type="text" name="companyName" value="<%=data?.job?.companyName %>" /></div>
+              <div class="form-group"><label>Company Name:</label><input type="text" name="companyName"></div>
             </div>
             <div class="col-md-6 col-12">
-              <div class="form-group"><label>Job Role/Position:</label><input type="text" name="jobRole" value="<%=data?.job?.jobRole %>" /></div>
+              <div class="form-group"><label>Job Role/Position:</label><input type="text" name="jobRole"></div>
             </div>
             <div class="col-md-12 col-12">
               <div class="form-group"><label>Location:</label><input type="text" name="location"></div>
@@ -279,56 +300,80 @@
         </div>
       </div>
 
+
       <!-- Step 4: Job Role in A2G -->
       <div class="step" id="step4">
+        <h5>Step 4: Job Role in <%= data?.job?.companyName || "Company" %>
+        </h5>
 
-        <h5>Step 4: Job Role in A2G</h5>
-        <div class="company-header-container">
-          <img
-            src="https://static.vecteezy.com/system/resources/previews/008/214/517/non_2x/abstract-geometric-logo-or-infinity-line-logo-for-your-company-free-vector.jpg"
-            alt="image" style="width:100%;max-width: 150px;object-fit: cover;">
+        <div class="company-header-container mb-3">
+          <img src="/<%= data?.job?.logo || 'default-logo.jpg' %>" alt="company-logo"
+            style="width:100%;max-width: 150px;object-fit: cover;">
         </div>
+
         <div class="row">
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Select Job Profile:</label>
-              <select name="jobProfile">
-                <option>Sales Executive</option>
-                <option>HR Associate</option>
-                <option>Marketing Coordinator</option>
+              <select name="jobProfile" class="form-control">
+                <% if (data?.job?.jobRole?.length) { %>
+                  <% data.job.jobRole.forEach(function(role) { %>
+                    <option value="<%= role %>">
+                      <%= role %>
+                    </option>
+                    <% }) %>
+                      <% } else { %>
+                        <option disabled>No Roles Available</option>
+                        <% } %>
               </select>
             </div>
           </div>
+
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Salary Offered:</label><input type="text" name="salary"></div>
+            <div class="form-group">
+              <label>Salary Offered:</label>
+              <input type="text" name="salary" class="form-control">
+            </div>
           </div>
+
           <div class="col-md-12 col-12">
-            <div class="form-group"><label>Referred by (HR Name):</label><input type="text" name="referredBy"></div>
+            <div class="form-group">
+              <label>Referred by (HR Name):</label>
+              <input type="text" name="referredBy" class="form-control">
+            </div>
           </div>
+
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Interview Date:</label><input type="date" name="interviewDate"></div>
+            <div class="form-group">
+              <label>Interview Date:</label>
+              <input type="date" name="interviewDate" class="form-control">
+            </div>
           </div>
+
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Interview Type:</label>
-              <select name="interviewType">
-                <option>Telephone</option>
-                <option>Video Call</option>
-                <option>In Person</option>
+              <select name="interviewType" class="form-control">
+                <option value="Telephone">Telephone</option>
+                <option value="Video Call">Video Call</option>
+                <option value="In Person">In Person</option>
               </select>
             </div>
           </div>
         </div>
 
-        <small> <input type="checkbox" id="agree" style=" width:10px;"> I agree to the
+        <small>
+          <input type="checkbox" id="agree" style="width:10px;"> I agree to the
           <a href="#" target="_blank">Privacy Policy</a> and
           <a href="#" target="_blank">Terms & Conditions</a>.
         </small>
+
         <div class="mt-4">
           <button type="button" onclick="prevStep(2)" class="back-step-button">Back</button>
-          <button type="button" onclick="submitForm()"   class="next-step-button">Submit</button>
+          <button type="button" onclick="submitForm()" class="next-step-button">Submit</button>
         </div>
       </div>
+
 
     </form>
   </div>
@@ -353,6 +398,9 @@
     const steps = document.querySelectorAll('.step');
 
     function nextStep(index) {
+      
+      
+     const number = document.getElementsByName("number").value
       steps[currentStep].classList.remove('active');
       currentStep = index;
       steps[currentStep].classList.add('active');
@@ -440,7 +488,7 @@
 
   <script>
     const pathParts = window.location.pathname.split('/');
-    const link = pathParts[pathParts.length - 1];  
+    const link = pathParts[pathParts.length - 1];
     async function submitForm() {
       const agree = document.getElementById('agree');
       if (!agree.checked) {
@@ -462,7 +510,7 @@
         if (result.status) {
           form.reset(); // Clear form after successful submission
           showPopup()
-          setTimeout(()=> window.location.reload() , 3000)
+          setTimeout(() => window.location.reload(), 3000)
         } else {
           alert(result.message || 'Something went wrong. Try again.');
         }
@@ -473,25 +521,43 @@
     }
 
     function nextStep(index) {
-      const currentForm = steps[currentStep]; // Current step's element
-      const requiredFields = currentForm.querySelectorAll('input[required], select[required], textarea[required]');
-      let isValid = true;
-      requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-          field.style.border = "1px solid red";
-          isValid = false;
-        } else {
-          field.style.border = "1px solid #ccc";
-        }
-      });
-      if (!isValid) {
-        alert("Please fill all required fields before proceeding.");
-        return;
-      }
-      steps[currentStep].classList.remove('active');
-      currentStep = index;
-      steps[currentStep].classList.add('active');
+  const currentForm = steps[currentStep]; // Current step's element
+  const requiredFields = currentForm.querySelectorAll('input[required], select[required], textarea[required]');
+  let isValid = true;
+
+  // Regular expression for 10-digit mobile number starting with 6-9
+  const mobileRegex = /^[6-9]\d{9}$/;
+
+  requiredFields.forEach(field => {
+    const value = field.value.trim();
+    const name = field.name;
+
+    if (!value) {
+      field.style.border = "1px solid red";
+      isValid = false;
+    } else if (
+      // Apply mobile number check only on relevant fields
+      (name === 'number' || name === 'AlternateNumber' || name === 'fatherNumber' || name === 'motherNumber') &&
+      !mobileRegex.test(value)
+    ) {
+      field.style.border = "1px solid red";
+      isValid = false;
+    } else {
+      field.style.border = "1px solid #ccc";
     }
+  });
+
+  if (!isValid) {
+    alert("Please fill all required fields correctly before proceeding.");
+    return;
+  }
+ 
+  // Proceed to next step
+  steps[currentStep].classList.remove('active');
+  currentStep = index;
+  steps[currentStep].classList.add('active');
+}
+
   </script>
 </body>
 
