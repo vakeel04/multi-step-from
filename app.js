@@ -7,7 +7,7 @@ const ejs = require("ejs");
 var logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const env = require("dotenv");
-const database = require("./config/db")
+const Sequelize = require("./config/db")
 const router  = require("./routers/jobFormRouter")
 const webRouter = require("./routers/webRouter")
 const dsRouter = require("./routers/dsRouter")
@@ -25,8 +25,7 @@ env.config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-database();
-
+ 
 
 // Template engine setup
 app.set("views", path.join(__dirname, "views"));

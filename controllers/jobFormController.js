@@ -1,43 +1,45 @@
-const JobForm = require("../models/jobFormModel");
-const Job = require("../models/jobModel");
+// Sequelize Models
+const  JobForm  = require("../models/jobFormModel");
+const Job = require("../models/jobModel")
+const { Op } = require("sequelize");
+
 const createJobForm = async (req, res) => {
   try {
-   const {link} =req.params 
-    const isLinkValid =  await Job.findOne({ link:link });
-    if(!isLinkValid) return res.status(404).send({ status: false, message: "link is not valid." })
-    const alreadyExists = await JobForm.findOne({ link });
-    if (alreadyExists) return res.status(409).send({ status: false, message: "Job Form already exists with this link." });
+    const { link } = req.params;
+    console.log("link",link);
+    
+    const isLinkValid = await Job.findOne({ where: { link } });
+    if (!isLinkValid)
+      return res.status(404).send({ status: false, message: "Link is not valid." });
 
-  let experience =  {
-    companyName : req.body.companyName,
-    jobRole : req.body.jobRole,
-    location :  req.body.location,
-    joiningDate : req.body.joiningDate,
-    endDate :  req.body.endDate,
-    totalExperience: req.body.totalExperience,
-  }
-  console.log("experience---",experience)
-    // Handle file uploads from multer
+    const alreadyExists = await JobForm.findOne({ where: { link } });
+    if (alreadyExists)
+      return res.status(409).send({ status: false, message: "Job form already exists with this link." });
+
+    // Handle file uploads
     const files = req.files;
     const getFilePath = (name) => files?.[name]?.[0]?.path || '';
 
-    const newForm = await JobForm.create({
+    const formData = {
       ...req.body,
-      experiences:experience,
+      experiences: req.body.experiences ? JSON.parse(req.body.experiences) : [], // Make sure it's an array
       panFront: getFilePath('panFront'),
       panBack: getFilePath('panBack'),
       aadharFront: getFilePath('aadharFront'),
       aadharBack: getFilePath('aadharBack'),
       marksheet10: getFilePath('marksheet10'),
       marksheet12: getFilePath('marksheet12'),
-      qualificationMarksheet: getFilePath('qualificationMarksheet'),
+      lastQualificationMarksheet: getFilePath('qualificationMarksheet'),
       fresherCV: getFilePath('fresherCV'),
       resume: getFilePath('resume'),
-      link:link
-    });
+      link
+    };
+
+    const newForm = await JobForm.create(formData);
+
     return res.status(201).send({ status: true, message: "Job form submitted successfully", data: newForm });
   } catch (error) {
-    console.log("createJobForm error:", error);
+    console.error("createJobForm error:", error);
     res.status(500).send({ status: false, message: error.message });
   }
 };
@@ -46,45 +48,47 @@ const getAllJobForms = async (req, res) => {
   try {
     const { page = 1, limit = 10, search = "", city = "" } = req.query;
 
-    const query = {
-      $and: [
+    const whereClause = {
+      [Op.and]: [
         {
-          $or: [
-            { fullName: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-            { number: { $regex: search, $options: "i" } },
-          ],
+          [Op.or]: [
+            { fullName: { [Op.like]: `%${search}%` } },
+            { email: { [Op.like]: `%${search}%` } },
+            { number: { [Op.like]: `%${search}%` } },
+          ]
         },
-        city ? { "currentCity": city } : {},
-      ],
+        city ? { currentCity: city } : {}
+      ]
     };
 
-    const forms = await JobForm.find(query)
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit));
+    const offset = (page - 1) * limit;
 
-    const total = await JobForm.countDocuments(query);
+    const { rows, count } = await JobForm.findAndCountAl-l({
+      where: whereClause,
+      offset,
+      limit: parseInt(limit)
+    });
 
     res.status(200).json({
-      data: forms,
-      total,
+      data: rows,
+      total: count,
       page: parseInt(page),
-      pages: Math.ceil(total / limit),
+      pages: Math.ceil(count / limit)
     });
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch data", error: err.message });
   }
-
 };
 
 const getJobFormById = async (req, res) => {
   try {
     const { id } = req.params;
-    const form = await JobForm.findById(id);
-    if (!form) return res.status(404).send({ status: false, message: "Job form not found" });
+    const form = await JobForm.findByPk(id);
+    if (!form)
+      return res.status(404).send({ status: false, message: "Job form not found" });
     return res.status(200).send({ status: true, message: "Job form found", data: form });
   } catch (error) {
-    console.log("getJobFormById error:", error);
+    console.error("getJobFormById error:", error);
     res.status(500).send({ status: false, message: error.message });
   }
 };
@@ -92,11 +96,24 @@ const getJobFormById = async (req, res) => {
 const updateJobForm = async (req, res) => {
   try {
     const { id } = req.params;
-    const updated = await JobForm.findByIdAndUpdate(id, req.body, { new: true });
-    if (!updated) return res.status(404).send({ status: false, message: "Job form not found for update" });
-    return res.status(200).send({ status: true, message: "Job form updated successfully", data: updated });
+
+    const formData = {
+      ...req.body,
+      experiences: req.body.experiences ? JSON.parse(req.body.experiences) : undefined
+    };
+
+    const [updated] = await JobForm.update(formData, {
+      where: { id },
+      returning: true
+    });
+
+    if (!updated)
+      return res.status(404).send({ status: false, message: "Job form not found for update" });
+
+    const updatedForm = await JobForm.findByPk(id);
+    return res.status(200).send({ status: true, message: "Job form updated successfully", data: updatedForm });
   } catch (error) {
-    console.log("updateJobForm error:", error);
+    console.error("updateJobForm error:", error);
     res.status(500).send({ status: false, message: error.message });
   }
 };
@@ -104,11 +121,12 @@ const updateJobForm = async (req, res) => {
 const deleteJobForm = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await JobForm.findByIdAndDelete(id);
-    if (!deleted) return res.status(404).send({ status: false, message: "Job form not found for deletion" });
-    return res.status(200).send({ status: true, message: "Job form deleted successfully", data: deleted });
+    const deleted = await JobForm.destroy({ where: { id } });
+    if (!deleted)
+      return res.status(404).send({ status: false, message: "Job form not found for deletion" });
+    return res.status(200).send({ status: true, message: "Job form deleted successfully" });
   } catch (error) {
-    console.log("deleteJobForm error:", error);
+    console.error("deleteJobForm error:", error);
     res.status(500).send({ status: false, message: error.message });
   }
 };

@@ -2,7 +2,7 @@
  const Job = require("../models/jobModel")
 const multiStepFormController = async (req, res) => {
     try { 
-      const  job = await Job.findOne({link:req.params.link})
+      const  job = await Job.findOne({ where: { link: req.params.link } })
       if(!job) return res.send({message:"this link is not valid !"})
         const link = req.params.link
       res.render("multistep-form", {

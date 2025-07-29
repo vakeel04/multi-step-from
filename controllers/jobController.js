@@ -1,23 +1,17 @@
-const Job = require("../models/jobModel");
 const { v4: uuidv4 } = require("uuid");
+const Job = require("../models/jobModel"); // Sequelize model
+const { Op } = require("sequelize");
 
 const createJob = async (req, res) => {
   try {
-    const {companyName,candidateName,jobTitle} = req.body
-    const rawLink = uuidv4();
-    const link = rawLink.replace(/-/g, ''); 
-    if(req.file){
-      req.body.logo = req.file.path 
-    }
+    const rawLink = uuidv4().replace(/-/g, '');
+     
     const payload = {
       ...req.body,
-      link, // assign generated link
+      link: rawLink
     };
-    console.log("job role --->  ",req.body.jobRole)
-    // console.log("file--",req.file)
-    // console.log("body--",req.body)
-    // console.log("payload--",payload)
-  
+    console.log("payload----->",payload);
+    
     const newJob = await Job.create(payload);
     return res.status(201).json({
       status: true,
@@ -30,31 +24,29 @@ const createJob = async (req, res) => {
   }
 };
 
-
- 
 const getAllJobs = async (req, res) => {
   try {
     const { page = 1, limit = 10, search = "" } = req.query;
+    const offset = (page - 1) * limit;
 
-    const query = {
-      $or: [
-        { companyname: { $regex: search, $options: "i" } },
-        { jobTitle: { $regex: search, $options: "i" } },
-        { candidateName: { $regex: search, $options: "i" } }
-      ]
-    };
-
-    const jobs = await Job.find(query)
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit));
-
-    const total = await Job.countDocuments(query);
+    const result = await Job.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { companyName: { [Op.like]: `%${search}%` } },
+          { jobRole: { [Op.like]: `%${search}%` } },
+          { candidateName: { [Op.like]: `%${search}%` } },
+        ]
+      },
+      limit: parseInt(limit),
+      offset,
+      order: [['createdAt', 'DESC']]
+    });
 
     res.status(200).json({
-      data: jobs,
-      total,
+      data: result.rows,
+      total: result.count,
       page: parseInt(page),
-      pages: Math.ceil(total / limit),
+      pages: Math.ceil(result.count / limit),
     });
   } catch (error) {
     console.error("getAllJobs error:", error);
@@ -62,13 +54,13 @@ const getAllJobs = async (req, res) => {
   }
 };
 
-// Get Job by ID
 const getJobById = async (req, res) => {
   try {
     const { id } = req.params;
-    const job = await Job.findById(id);
-    if (!job) return res.status(404).json({ status: false, message: "Job not found" });
-
+    const job = await Job.findByPk(id); 
+    if (!job) {
+      return res.status(404).json({ status: false, message: "Job not found" });
+    }
     res.status(200).json({ status: true, message: "Job found", data: job });
   } catch (error) {
     console.error("getJobById error:", error);
@@ -76,28 +68,40 @@ const getJobById = async (req, res) => {
   }
 };
 
-// Update Job
 const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
-    const updated = await Job.findByIdAndUpdate(id, req.body, { new: true });
-    if (!updated) return res.status(404).json({ status: false, message: "Job not found for update" });
 
-    res.status(200).json({ status: true, message: "Job updated successfully", data: updated });
+    const [updatedCount, updatedRows] = await Job.update(req.body, {
+      where: { id },
+      returning: true,
+    });
+
+    if (updatedCount === 0) {
+      return res.status(404).json({ status: false, message: "Job not found for update" });
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "Job updated successfully",
+      data: updatedRows[0],
+    });
   } catch (error) {
     console.error("updateJob error:", error);
     res.status(500).json({ status: false, message: error.message });
   }
 };
 
-// Delete Job
 const deleteJob = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Job.findByIdAndDelete(id);
-    if (!deleted) return res.status(404).json({ status: false, message: "Job not found for deletion" });
+    const deleted = await Job.destroy({ where: { id } });
 
-    res.status(200).json({ status: true, message: "Job deleted successfully", data: deleted });
+    if (!deleted) {
+      return res.status(404).json({ status: false, message: "Job not found for deletion" });
+    }
+
+    res.status(200).json({ status: true, message: "Job deleted successfully" });
   } catch (error) {
     console.error("deleteJob error:", error);
     res.status(500).json({ status: false, message: error.message });

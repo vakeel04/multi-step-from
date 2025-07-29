@@ -1,69 +1,89 @@
-const mongoose = require("mongoose");
-const mobileNumberValidator = {
-  validator: function (v) {
-    return /^[6-9][0-9]{9}$/.test(v);
-  },
-  message: props => `${props.value} is not a valid 10-digit mobile number`,
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
+
+// Custom mobile validator
+const mobileValidator = {
+  is: {
+    args: /^[6-9][0-9]{9}$/,
+    msg: "Invalid 10-digit mobile number"
+  }
 };
-const schema = new mongoose.Schema(
-  {
-    fullName: { type: String, required: true },
-    fatherName: { type: String, required: true },
-    motherName: { type: String, required: true },
-    email: {
-      type: String, unique: true, trime: true, validate: {
-          validator: function (v) {
-              return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-          },
-          message: "Please enter a valid email"
-      }, required: true
+
+const JobForm = sequelize.define('JobForm', {
+  fullName: { type: DataTypes.STRING, allowNull: false },
+  fatherName: { type: DataTypes.STRING, allowNull: false },
+  motherName: { type: DataTypes.STRING, allowNull: false },
+
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: { msg: 'Please enter a valid email' }
+    }
   },
-  number: {type: String,required: true,validate: mobileNumberValidator,},
-  AlternateNumber: {type: String,required: true,validate: mobileNumberValidator, },
-  fatherNumber: { type: String, required: true, validate: mobileNumberValidator, },
-  motherNumber: {type: String, required: true, validate: mobileNumberValidator,},
-    currentAddress: String,
-    currentCity: String,
-    currentPincode: String,
-    permanentAddress: String,
-    permanentCity: String,
-    permanentPincode: String,
 
-    panFront: String,
-    panBack: String,
-    aadharFront: String,
-    aadharBack: String,
-    marksheet10: String,
-    marksheet12: String,
-    lastQualification: String,
-    lastQualificationMarksheet: String,
-    experienceType: String,
-
-    // Step 3: Experience
-    fresherCV: String,
-    experiences: [
-      {
-        companyName: String,
-        jobRole: String,
-        location: String,
-        joiningDate: Date,
-        endDate: Date,
-        totalExperience: String,
-      },
-    ],
-    resume: String,
-
-    // Step 4: Job Role
-    jobProfile: String,
-    salary: String,
-    referredBy: String,
-    interviewDate: String,
-    interviewType: String,
-    link: { type: String, required: true, unique: true }, 
+  number: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: mobileValidator
   },
-  { timestamps: true }
-);
+  AlternateNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: mobileValidator
+  },
+  fatherNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: mobileValidator
+  },
+  motherNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: mobileValidator
+  },
 
-const JobForm = mongoose.model("job-forms", schema);
+  currentAddress: DataTypes.STRING,
+  currentCity: DataTypes.STRING,
+  currentPincode: DataTypes.STRING,
+  permanentAddress: DataTypes.STRING,
+  permanentCity: DataTypes.STRING,
+  permanentPincode: DataTypes.STRING,
+
+  panFront: DataTypes.STRING,
+  panBack: DataTypes.STRING,
+  aadharFront: DataTypes.STRING,
+  aadharBack: DataTypes.STRING,
+  marksheet10: DataTypes.STRING,
+  marksheet12: DataTypes.STRING,
+  lastQualification: DataTypes.STRING,
+  lastQualificationMarksheet: DataTypes.STRING,
+  experienceType: DataTypes.STRING,
+
+  fresherCV: DataTypes.STRING,
+
+  experiences: {
+    type: DataTypes.JSON, // Array of experience objects
+    defaultValue: []
+  },
+
+  resume: DataTypes.STRING,
+
+  jobProfile: DataTypes.STRING,
+  salary: DataTypes.STRING,
+  referredBy: DataTypes.STRING,
+  interviewDate: DataTypes.STRING,
+  interviewType: DataTypes.STRING,
+
+  link: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  }
+}, {
+  timestamps: true,
+  tableName: 'job_forms'
+});
+
 module.exports = JobForm;
- 
