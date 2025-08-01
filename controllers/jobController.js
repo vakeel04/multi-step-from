@@ -4,14 +4,21 @@ const { Op } = require("sequelize");
 
 const createJob = async (req, res) => {
   try {
-    const rawLink = uuidv4().replace(/-/g, '');
-     
+    const rawLink = uuidv4().replace(/-/g, "");
+
+    const companyName = req.body.companyName;
+
+    const companyLogo = companyName + ".png";
+
+    console.log("companyLogo : ", companyLogo);
+
+    console.log(req.body);
     const payload = {
       ...req.body,
-      link: rawLink
+      link: rawLink,
+      logo: companyLogo,
     };
-    console.log("payload----->",payload);
-    
+
     const newJob = await Job.create(payload);
     return res.status(201).json({
       status: true,
@@ -35,11 +42,11 @@ const getAllJobs = async (req, res) => {
           { companyName: { [Op.like]: `%${search}%` } },
           { jobRole: { [Op.like]: `%${search}%` } },
           { candidateName: { [Op.like]: `%${search}%` } },
-        ]
+        ],
       },
       limit: parseInt(limit),
       offset,
-      order: [['createdAt', 'DESC']]
+      order: [["createdAt", "DESC"]],
     });
 
     res.status(200).json({
@@ -57,7 +64,7 @@ const getAllJobs = async (req, res) => {
 const getJobById = async (req, res) => {
   try {
     const { id } = req.params;
-    const job = await Job.findByPk(id); 
+    const job = await Job.findByPk(id);
     if (!job) {
       return res.status(404).json({ status: false, message: "Job not found" });
     }
@@ -78,7 +85,9 @@ const updateJob = async (req, res) => {
     });
 
     if (updatedCount === 0) {
-      return res.status(404).json({ status: false, message: "Job not found for update" });
+      return res
+        .status(404)
+        .json({ status: false, message: "Job not found for update" });
     }
 
     res.status(200).json({
@@ -98,7 +107,9 @@ const deleteJob = async (req, res) => {
     const deleted = await Job.destroy({ where: { id } });
 
     if (!deleted) {
-      return res.status(404).json({ status: false, message: "Job not found for deletion" });
+      return res
+        .status(404)
+        .json({ status: false, message: "Job not found for deletion" });
     }
 
     res.status(200).json({ status: true, message: "Job deleted successfully" });

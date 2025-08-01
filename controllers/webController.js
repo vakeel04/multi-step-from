@@ -20,5 +20,23 @@ const multiStepFormController = async (req, res) => {
       res.redirect("/error?error=" + error.message);
     }
   };
-  module.exports = {multiStepFormController}
+
+
+  const loginController = async (req, res) => {
+    try { 
+      res.render("login", {
+        status: true,
+        message: "login page successfully loaded",
+        error: {},
+        data: {
+        },
+        title: "login Page",
+        
+      });
+    } catch (error) {
+      console.log(error)
+      res.redirect("/error?error=" + error.message);
+    }
+  };
+  module.exports = {multiStepFormController,loginController}
   

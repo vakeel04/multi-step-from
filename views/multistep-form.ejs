@@ -30,6 +30,11 @@
       display: block;
     }
 
+    #form #div {
+      border-bottom: 2px solid #808080;
+      padding: 20px 0;
+    }
+
     .form-group {
       margin-bottom: 15px;
     }
@@ -230,8 +235,10 @@
           </div>
 
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Upload Last Qualification Marksheet:</label><input type="file"
-                name="lastQualificationMarksheet"></div>
+            <div class="form-group">
+              <label>Upload Last Qualification Marksheet:</label>
+              <input type="file" name="lastQualificationMarksheet">
+            </div>
           </div>
 
           <div class="col-md-12 col-12">
@@ -263,37 +270,21 @@
           <div class="small-text">*pdf, doc, jpg, png</div>
         </div>
 
-        <div id="experiencedSection" style="display: none;">
-          <div class="row">
-            <div class="col-md-6 col-12">
-              <div class="form-group"><label>Company Name:</label><input type="text" name="companyName"></div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group"><label>Job Role/Position:</label><input type="text" name="jobRole"></div>
-            </div>
-            <div class="col-md-12 col-12">
-              <div class="form-group"><label>Location:</label><input type="text" name="location"></div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group"><label>Joining Date:</label><input type="date" name="joiningDate"></div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group"><label>End Date:</label><input type="date" name="endDate"></div>
-            </div>
-            <div class="col-md-12 col-12">
-              <div class="form-group"><label>Total Experience</label><input type="text" name="totalExperience"></div>
-            </div>
-          </div>
-          <div id="experienceContainer"></div>
-          <button type="button" onclick="addExperience()" class="add-experience-btn mt-3 mb-3">+ Add Experience</button>
+        <div id="experience-container">
+          <h4>Experience</h4>
 
-          <div class="form-group">
+          <div id="form">
+
+          </div>
+          <!-- Resume Upload -->
+          <div class="mb-3  mt-5">
             <label>Upload Your CV/Resume</label>
-            <input type="file" name="resume">
-            <div class="small-text">*pdf, doc, jpg, png</div>
+            <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.jpg,.png" />
+            <small class="form-text text-muted">*pdf, doc, jpg, png</small>
           </div>
-        </div>
 
+          <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">+ Add Experience</button>
+        </div>
         <div class="mt-4">
           <button type="button" onclick="prevStep(1)" class="back-step-button">Back</button>
           <button type="button" onclick="nextStep(3)" class="next-step-button">Next</button>
@@ -307,57 +298,44 @@
         </h5>
 
         <div class="company-header-container mb-3">
-          <img src="/<%= data?.job?.logo || 'default-logo.jpg' %>" alt="company-logo"
-            style="width:100%;max-width: 150px;object-fit: cover;">
+          <img src="/images/<%= data?.job?.logo %>" alt="company-logo" style="width:100%;max-width: 150px;object-fit:
+          cover;">
         </div>
 
         <div class="row">
           <div class="col-md-6 col-12">
             <div class="form-group">
-              <label>Select Job Profile:</label>
-              <select name="jobProfile" class="form-control">
-                <% if (data?.job?.jobRole?.length) { %>
-                  <% data.job.jobRole.forEach(function(role) { %>
-                    <option value="<%= role %>">
-                      <%= role %>
-                    </option>
-                    <% }) %>
-                      <% } else { %>
-                        <option disabled>No Roles Available</option>
-                        <% } %>
-              </select>
+              <label>Job Profile:</label>
+              <input type="text" name="jobProfile" class="form-control" value="<%= data?.job?.jobRole %>" readonly>
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Salary Offered:</label>
-              <input type="text" name="salary" class="form-control">
+              <input type="text" name="salary" class="form-control" value="<%= data?.job?.OfferedSalary %>" readonly>
             </div>
           </div>
 
           <div class="col-md-12 col-12">
             <div class="form-group">
               <label>Referred by (HR Name):</label>
-              <input type="text" name="referredBy" class="form-control">
+              <input type="text" name="referredBy" class="form-control" value="<%= data?.job?.hrName %>" readonly>
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Interview Date:</label>
-              <input type="date" name="interviewDate" class="form-control">
+              <input type="text" name="interviewDate" class="form-control" value="<%= data?.job?.date %>" readonly>
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Interview Type:</label>
-              <select name="interviewType" class="form-control">
-                <option value="Telephone">Telephone</option>
-                <option value="Video Call">Video Call</option>
-                <option value="In Person">In Person</option>
-              </select>
+              <input type="text" name="interviewType" class="form-control" value="<%= data?.job?.interviewType %>"
+                readonly>
             </div>
           </div>
         </div>
@@ -398,9 +376,9 @@
     const steps = document.querySelectorAll('.step');
 
     function nextStep(index) {
-      
-      
-     const number = document.getElementsByName("number").value
+
+
+      const number = document.getElementsByName("number").value
       steps[currentStep].classList.remove('active');
       currentStep = index;
       steps[currentStep].classList.add('active');
@@ -426,38 +404,65 @@
 
     function toggleExperience(isFresher) {
       document.getElementById('fresherSection').style.display = isFresher ? 'block' : 'none';
-      document.getElementById('experiencedSection').style.display = isFresher ? 'none' : 'block';
+      document.getElementById('experience-container').style.display = isFresher ? 'none' : 'block';
+
+      if (!isFresher) {
+        addExperience();
+      }
     }
 
+    let expIndex = 0;
+
     function addExperience() {
-      const container = document.getElementById('experienceContainer');
-      const div = document.createElement('div');
-      div.classList.add('experience-block');
-      div.innerHTML = `
-        <hr>
-          <div class="row">
-          <div class="col-md-6 col-12">
-              <div class="form-group"><label>Company Name:</label><input type="text" name="companyName[]"></div>
-          </div>
-          <div class="col-md-6 col-12">
-             <div class="form-group"><label>Job Role/Position:</label><input type="text" name="jobRole[]"></div>
-          </div>
-          <div class="col-md-12 col-12">
-            <div class="form-group"><label>Location:</label><input type="text" name="location[]"></div>
-          </div>
-          <div class="col-md-6 col-12">
-               <div class="form-group"><label>Joining Date:</label><input type="date" name="joiningDate[]"></div>
-          </div>
-          <div class="col-md-6 col-12">
-          <div class="form-group"><label>End Date:</label><input type="date" name="endDate[]"></div>
-          </div>
-          <div class="col-md-12 col-12">
-            <div class="form-group"><label>Total Experience (Days):</label><input type="text" name="totalExperience[]" readonly></div>
-          </div>
-        </div>
-        `;
-      container.appendChild(div);
+      const container = document.getElementById('form');
+      const html = `
+<div id="div">
+  <div class="row g-3 experience-group mb-3">
+    <div class="col-md-6">
+      <label>Company Name:</label>
+      <input type="text" name="experiences[0][companyName]" class="form-control" placeholder="Enter company name" required />
+    </div>
+    <div class="col-md-6">
+      <label>Job Role/Position:</label>
+      <input type="text" name="experiences[0][jobRole]" class="form-control" placeholder="Enter job role" required />
+    </div>
+
+    <div class="col-md-6">
+      <label>Location:</label>
+      <input type="text" name="experiences[0][location]" class="form-control" placeholder="Enter location" required />
+    </div>
+
+    <div class="col-md-3">
+      <label>Joining Date:</label>
+      <input type="date" name="experiences[0][joiningDate]" class="form-control" required />
+    </div>
+    <div class="col-md-3">
+      <label>End Date:</label>
+      <input type="date" name="experiences[0][endDate]" class="form-control" required />
+    </div>
+
+    <div class="col-md-12">
+      <label>Total Experience (Days):</label>
+      <input type="number" name="experiences[0][experienceDays]" class="form-control" placeholder="e.g. 365" required />
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+  `;
+      container.insertAdjacentHTML('beforeend', html);
+      expIndex++;
     }
+
+    function removeExperience(button) {
+      button.closest('.experience-group').remove();
+    }
+
+
 
     function showPopup() {
       document.getElementById('popupAccept').style.display = 'block';
@@ -521,42 +526,42 @@
     }
 
     function nextStep(index) {
-  const currentForm = steps[currentStep]; // Current step's element
-  const requiredFields = currentForm.querySelectorAll('input[required], select[required], textarea[required]');
-  let isValid = true;
+      const currentForm = steps[currentStep]; // Current step's element
+      const requiredFields = currentForm.querySelectorAll('input[required], select[required], textarea[required]');
+      let isValid = true;
 
-  // Regular expression for 10-digit mobile number starting with 6-9
-  const mobileRegex = /^[6-9]\d{9}$/;
+      // Regular expression for 10-digit mobile number starting with 6-9
+      const mobileRegex = /^[6-9]\d{9}$/;
 
-  requiredFields.forEach(field => {
-    const value = field.value.trim();
-    const name = field.name;
+      requiredFields.forEach(field => {
+        const value = field.value.trim();
+        const name = field.name;
 
-    if (!value) {
-      field.style.border = "1px solid red";
-      isValid = false;
-    } else if (
-      // Apply mobile number check only on relevant fields
-      (name === 'number' || name === 'AlternateNumber' || name === 'fatherNumber' || name === 'motherNumber') &&
-      !mobileRegex.test(value)
-    ) {
-      field.style.border = "1px solid red";
-      isValid = false;
-    } else {
-      field.style.border = "1px solid #ccc";
+        if (!value) {
+          field.style.border = "1px solid red";
+          isValid = false;
+        } else if (
+          // Apply mobile number check only on relevant fields
+          (name === 'number' || name === 'AlternateNumber' || name === 'fatherNumber' || name === 'motherNumber') &&
+          !mobileRegex.test(value)
+        ) {
+          field.style.border = "1px solid red";
+          isValid = false;
+        } else {
+          field.style.border = "1px solid #ccc";
+        }
+      });
+
+      if (!isValid) {
+        alert("Please fill all required fields correctly before proceeding.");
+        return;
+      }
+
+      // Proceed to next step
+      steps[currentStep].classList.remove('active');
+      currentStep = index;
+      steps[currentStep].classList.add('active');
     }
-  });
-
-  if (!isValid) {
-    alert("Please fill all required fields correctly before proceeding.");
-    return;
-  }
- 
-  // Proceed to next step
-  steps[currentStep].classList.remove('active');
-  currentStep = index;
-  steps[currentStep].classList.add('active');
-}
 
   </script>
 </body>
