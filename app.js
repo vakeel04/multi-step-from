@@ -58,5 +58,5 @@ const uploadsPath = path.join(__dirname, "images");
 app.use("/images", express.static(uploadsPath));
 
 Server.listen(port, () => {
-  console.log(`ds Url :->) http://localhost:${port}/dashboard`);
+  console.log(`ds Url :->) http://localhost:${port}/login`);
 });

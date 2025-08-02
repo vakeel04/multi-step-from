@@ -116,7 +116,12 @@
             <div class="form-group"><label>Mother's Name:</label><input type="text" name="motherName" required></div>
           </div>
           <div class="col-md-12 col-12">
-            <div class="form-group"><label>Email Address:</label><input type="email" name="email" required></div>
+            <div class="form-group">
+              <label>Email Address:</label>
+              <input type="email" name="email" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                title="Please enter a valid email address (e.g., user@example.com)" oninput="validateEmail(this)">
+              <small id="emailError" class="text-danger d-none">Invalid email address</small>
+            </div>
           </div>
           <!-- Mobile Number -->
           <div class="col-md-6 col-12">
@@ -158,14 +163,24 @@
           <div class="col-md-12 col-12">
             <div class="form-group"><label>Current Address:</label><textarea name="currentAddress"></textarea></div>
           </div>
-          <div class="col-md-6 col-12">
-            <div class="form-group"><label>City:</label>
-              <select name="currentCity">
-                <option value="Jaipur">Jaipur</option>
+          <div class="col-md-4 col-12">
+            <div class="form-group">
+              <label for="state">State:</label>
+              <select id="state" name="state" class="form-control" onchange="populateCities()">
+                <option value="">-- Select State --</option>
               </select>
             </div>
           </div>
-          <div class="col-md-6 col-12">
+          <!-- City Dropdown -->
+          <div class="col-md-4 col-12">
+            <div class="form-group">
+              <label>City:</label>
+              <select id="city" name="currentCity" class="form-control">
+                <option value="">-- Select City --</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 col-12">
             <div class="form-group"><label>Pincode:</label><input type="text" name="currentPincode"></div>
           </div>
 
@@ -208,36 +223,74 @@
         <h5>Step 2: Document Uploading</h5>
         <div class="row">
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Pan Card Front:</label><input type="file" name="panFront" required></div>
+            <div class="form-group">
+              <label>Pan Card Front:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="panFront" required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
+
+            </div>
           </div>
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Pan Card Back:</label><input type="file" name="panBack" required></div>
+            <div class="form-group"><label>Pan Card Back:</label>
+              <div class="d-flex align-items-center gap-2"><input type="file" accept=".pdf, image/*" name="panBack"
+                  required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Aadhar Card Front:</label><input type="file" name="aadharFront" required>
+            <div class="form-group"><label>Aadhar Card Front:</label>
+              <div class="d-flex align-items-center gap-2"><input type="file" accept=".pdf, image/*" name="aadharFront"
+                  required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
             </div>
           </div>
 
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>Aadhar Card Back:</label><input type="file" name="aadharBack" required></div>
+            <div class="form-group"><label>Aadhar Card Back:</label>
+              <div class="d-flex align-items-center gap-2"><input type="file" accept=".pdf, image/*" name="aadharBack"
+                  required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>10th Marksheet:</label><input type="file" name="marksheet10" required></div>
+            <div class="form-group"><label>10th Marksheet:</label>
+              <div class="d-flex align-items-center gap-2"><input type="file" accept=".pdf, image/*" name="marksheet10"
+                  required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 col-12">
-            <div class="form-group"><label>12th Marksheet:</label><input type="file" name="marksheet12" required></div>
+            <div class="form-group"><label>12th Marksheet:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" name="marksheet12" required accept=".pdf, image/*" onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Last Qualification:</label>
-              <input type="text" name="lastQualification" required>
+              <div class="d-flex align-items-center gap-2">
+                <input type="text" name="lastQualification" required onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Upload Last Qualification Marksheet:</label>
-              <input type="file" name="lastQualificationMarksheet">
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" name="lastQualificationMarksheet" accept=".pdf, image/*" required
+                  onchange="showCheck(this)">
+                <span class="check-icon text-success fw-bold" style="display: none;">&#10004;</span>
+              </div>
             </div>
           </div>
 
@@ -266,24 +319,25 @@
         <h5>Step 3: Professional Background</h5>
         <div id="fresherSection" style="display: none;">
           <label>Upload Your CV:</label>
-          <input type="file" name="fresherCV">
-          <div class="small-text">*pdf, doc, jpg, png</div>
+          <input type="file" name="fresherCV" accept=".pdf">
+          <div class="small-text">*pdf</div>
         </div>
 
         <div id="experience-container">
+          <!-- Resume Upload -->
+          <div class="mb-3  mt-5">
+            <label>Upload Your CV/Resume</label>
+            <input type="file" name="resume" class="form-control" accept=".pdf">
+            <small class="form-text text-muted">*pdf</small>
+          </div>
+
+          <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">+ Add Experience</button>
           <h4>Experience</h4>
 
           <div id="form">
 
           </div>
-          <!-- Resume Upload -->
-          <div class="mb-3  mt-5">
-            <label>Upload Your CV/Resume</label>
-            <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.jpg,.png" />
-            <small class="form-text text-muted">*pdf, doc, jpg, png</small>
-          </div>
 
-          <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">+ Add Experience</button>
         </div>
         <div class="mt-4">
           <button type="button" onclick="prevStep(1)" class="back-step-button">Back</button>
@@ -415,51 +469,55 @@
 
     function addExperience() {
       const container = document.getElementById('form');
+
       const html = `
-<div id="div">
-  <div class="row g-3 experience-group mb-3">
+<div class="experience-wrapper mb-3" id="experience-${expIndex}">
+  <div class="row g-3 experience-group">
     <div class="col-md-6">
       <label>Company Name:</label>
-      <input type="text" name="experiences[0][companyName]" class="form-control" placeholder="Enter company name" required />
+      <input type="text" name="experiences[${expIndex}][companyName]" class="form-control" placeholder="Enter company name" required />
     </div>
     <div class="col-md-6">
       <label>Job Role/Position:</label>
-      <input type="text" name="experiences[0][jobRole]" class="form-control" placeholder="Enter job role" required />
+      <input type="text" name="experiences[${expIndex}][jobRole]" class="form-control" placeholder="Enter job role" required />
     </div>
 
     <div class="col-md-6">
       <label>Location:</label>
-      <input type="text" name="experiences[0][location]" class="form-control" placeholder="Enter location" required />
+      <input type="text" name="experiences[${expIndex}][location]" class="form-control" placeholder="Enter location" required />
     </div>
 
     <div class="col-md-3">
       <label>Joining Date:</label>
-      <input type="date" name="experiences[0][joiningDate]" class="form-control" required />
+      <input type="date" name="experiences[${expIndex}][joiningDate]" class="form-control" id="joiningDate-${expIndex}" required onchange="calculateExperience(${expIndex})" />
     </div>
+
     <div class="col-md-3">
       <label>End Date:</label>
-      <input type="date" name="experiences[0][endDate]" class="form-control" required />
+      <input type="date" name="experiences[${expIndex}][endDate]" class="form-control" id="endDate-${expIndex}" required onchange="calculateExperience(${expIndex})" />
     </div>
 
     <div class="col-md-12">
-      <label>Total Experience (Days):</label>
-      <input type="number" name="experiences[0][experienceDays]" class="form-control" placeholder="e.g. 365" required />
+      <label>Total Experience (YEAR, MONTH):</label>
+      <input type="text" name="experiences[${expIndex}][experienceDays]" class="form-control" id="experienceResult-${expIndex}" placeholder="e.g. 2 YEAR, 3 MONTH" required readonly />
     </div>
 
-
+    <div class="col-md-12 text-end">
+      <button type="button" class="btn btn-danger btn-sm" onclick="removeExperience(this)">Remove Experience</button>
+    </div>
   </div>
 </div>
+`;
 
-
-
-
-  `;
       container.insertAdjacentHTML('beforeend', html);
       expIndex++;
     }
 
     function removeExperience(button) {
-      button.closest('.experience-group').remove();
+      const wrapper = button.closest('.experience-wrapper');
+      if (wrapper) {
+        wrapper.remove();
+      }
     }
 
 
@@ -489,6 +547,19 @@
     document.addEventListener('DOMContentLoaded', function () {
       copyAddress();
     });
+  </script>
+  <!-- email validation -->
+  <script>
+    function validateEmail(input) {
+      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      const error = document.getElementById('emailError');
+
+      if (!emailPattern.test(input.value)) {
+        error.classList.remove('d-none');
+      } else {
+        error.classList.add('d-none');
+      }
+    }
   </script>
 
   <script>
@@ -532,7 +603,10 @@
 
       // Regular expression for 10-digit mobile number starting with 6-9
       const mobileRegex = /^[6-9]\d{9}$/;
+      const emailField = document.getElementById('email');
+      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 
+      // Check all required fields
       requiredFields.forEach(field => {
         const value = field.value.trim();
         const name = field.name;
@@ -541,7 +615,6 @@
           field.style.border = "1px solid red";
           isValid = false;
         } else if (
-          // Apply mobile number check only on relevant fields
           (name === 'number' || name === 'AlternateNumber' || name === 'fatherNumber' || name === 'motherNumber') &&
           !mobileRegex.test(value)
         ) {
@@ -551,6 +624,13 @@
           field.style.border = "1px solid #ccc";
         }
       });
+
+      // Extra check for email validity
+      if (emailField && !emailPattern.test(emailField.value)) {
+        emailField.style.border = "1px solid red";
+        document.getElementById('emailError').classList.remove('d-none');
+        isValid = false;
+      }
 
       if (!isValid) {
         alert("Please fill all required fields correctly before proceeding.");
@@ -562,7 +642,147 @@
       currentStep = index;
       steps[currentStep].classList.add('active');
     }
+  </script>
 
+  <script>
+    function showCheck(input) {
+      const checkIcon = input.nextElementSibling;
+      if (input.files && input.files.length > 0) {
+        checkIcon.style.display = "inline-block";
+      } else {
+        checkIcon.style.display = "none";
+      }
+    }
+  </script>
+
+  <script>
+    function calculateExperience(index) {
+      const joiningDate = document.getElementById(`joiningDate-${index}`).value;
+      const endDate = document.getElementById(`endDate-${index}`).value;
+
+      if (!joiningDate || !endDate) return;
+
+      const start = new Date(joiningDate);
+      const end = new Date(endDate);
+
+      if (end < start) {
+        document.getElementById(`experienceResult-${index}`).value = "Invalid date range";
+        return;
+      }
+
+      let years = end.getFullYear() - start.getFullYear();
+      let months = end.getMonth() - start.getMonth();
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      document.getElementById(`experienceResult-${index}`).value = `${years} YEAR${years !== 1 ? 'S' : ''}, ${months} MONTH${months !== 1 ? 'S' : ''}`;
+    }
+  </script>
+  <script>
+    function showCheck(input) {
+      const checkIcon = input.nextElementSibling;
+
+      // Allowed MIME types
+      const allowedTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp"
+      ];
+
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
+
+        if (!allowedTypes.includes(file.type)) {
+          alert(" Only PDF and image files (jpg, png, gif, webp) are allowed.");
+          input.value = ""; // Clear the invalid file
+          checkIcon.style.display = "none";
+          return;
+        }
+
+        // If file type is allowed
+        checkIcon.style.display = "inline-block";
+      } else {
+        checkIcon.style.display = "none";
+      }
+    }
+  </script>
+
+
+
+  <script>
+    // 1. State -> City Mapping
+    const stateCityMap = {
+      "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool"],
+      "Arunachal Pradesh": ["Itanagar", "Tawang", "Ziro", "Pasighat", "Bomdila"],
+      "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Tezpur"],
+      "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia"],
+      "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Durg"],
+      "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda"],
+      "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+      "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Karnal"],
+      "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Solan", "Mandi"],
+      "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
+      "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru", "Belgaum"],
+      "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Alappuzha"],
+      "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Ujjain"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+      "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Kakching", "Churachandpur"],
+      "Meghalaya": ["Shillong", "Tura", "Nongpoh", "Baghmara", "Williamnagar"],
+      "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib"],
+      "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Zunheboto"],
+      "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri"],
+      "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda"],
+      "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Bikaner"],
+      "Sikkim": ["Gangtok", "Namchi", "Gyalshing", "Mangan", "Rangpo"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+      "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
+      "Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailasahar", "Belonia"],
+      "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Noida"],
+      "Uttarakhand": ["Dehradun", "Haridwar", "Haldwani", "Nainital", "Rishikesh"],
+      "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+      "Andaman and Nicobar Islands": ["Port Blair", "Diglipur", "Rangat", "Mayabunder"],
+      "Chandigarh": ["Chandigarh"],
+      "Dadra and Nagar Haveli and Daman and Diu": ["Silvassa", "Daman", "Diu"],
+      "Delhi": ["New Delhi", "Dwarka", "Rohini", "Saket", "Karol Bagh"],
+      "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Udhampur"],
+      "Ladakh": ["Leh", "Kargil"],
+      "Lakshadweep": ["Kavaratti", "Agatti", "Minicoy", "Andrott"],
+      "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam"]
+    };
+
+    // 2. Populate State Dropdown
+    const stateSelect = document.getElementById("state");
+    const citySelect = document.getElementById("city");
+
+    Object.keys(stateCityMap).forEach(state => {
+      const option = document.createElement("option");
+      option.value = state;
+      option.textContent = state;
+      stateSelect.appendChild(option);
+    });
+
+    // 3. Populate Cities on State Change
+    function populateCities() {
+      const selectedState = stateSelect.value;
+
+      // Clear previous cities
+      citySelect.innerHTML = '<option value="">-- Select City --</option>';
+
+      if (selectedState && stateCityMap[selectedState]) {
+        stateCityMap[selectedState].forEach(city => {
+          const option = document.createElement("option");
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+        });
+      }
+    }
   </script>
 </body>
 
