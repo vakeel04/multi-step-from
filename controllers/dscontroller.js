@@ -53,7 +53,12 @@ const candidateDetail = async (req, res) => {
   try {
     const { link } = req.params;
     const form = await JobForm.findOne({ where: { link } });
-    if (!form) return res.status(404).send("Candidate form not filled!");
+    if (!form)
+      return res.render("error-page", {
+        message: "Candidate form not filled!",
+        title: "Form not filled",
+      });
+
     // 👇 Parse experiences if it's a JSON string
     if (typeof form.experiences === "string") {
       try {

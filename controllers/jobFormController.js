@@ -2,36 +2,39 @@
 const JobForm = require("../models/jobFormModel");
 const Job = require("../models/jobModel");
 const { Op } = require("sequelize");
+const sendMail = require("../service/mail_sender");
 
 const createJobForm = async (req, res) => {
   try {
     console.log("body===========", req.body);
     const { link } = req.params;
-    console.log("link", link);
 
+    // ✅ Step 1: Validate link
     const isLinkValid = await Job.findOne({ where: { link } });
-    if (!isLinkValid)
+    if (!isLinkValid) {
       return res
         .status(404)
-        .send({ status: false, message: "Link is not valid." });
+        .json({ status: false, message: "Link is not valid." });
+    }
 
-    const alreadyExists = await JobForm.findOne({ where: { link } });
-    if (alreadyExists)
-      return res.status(409).send({
+    // ✅ Step 2: Validate candidate email
+    if (!req.body.email) {
+      return res.status(400).json({
         status: false,
-        message: "Job form already exists with this link.",
+        message: "Candidate email is missing.",
       });
+    }
+  
 
-    // Handle file uploads
+    // ✅ Step 4: Prepare files
     const files = req.files;
     const getFilePath = (name) => files?.[name]?.[0]?.path || "";
 
+    // ✅ Step 5: Handle experiences
     let experienceArray = [];
-
     const expInput = req.body.experiences?.[0];
 
     if (expInput) {
-      // If it's a multiple-experience form (arrays)
       if (
         Array.isArray(expInput.companyName) &&
         Array.isArray(expInput.jobRole)
@@ -47,7 +50,6 @@ const createJobForm = async (req, res) => {
           });
         }
       } else {
-        // Single experience object (all fields are strings)
         experienceArray.push({
           companyName: expInput.companyName,
           jobRole: expInput.jobRole,
@@ -58,8 +60,8 @@ const createJobForm = async (req, res) => {
         });
       }
     }
-    console.log("experienceArray---->", experienceArray);
 
+    // ✅ Step 6: Create form data object
     const formData = {
       ...req.body,
       experiences: experienceArray,
@@ -74,17 +76,45 @@ const createJobForm = async (req, res) => {
       resume: getFilePath("resume"),
       link,
     };
-    console.log("formdata---", formData);
 
+    // ✅ Step 7: Insert into DB
     const newForm = await JobForm.create(formData);
-    return res.status(201).send({
+
+    /** ✅ Send email to Candidate **/
+    await sendMail(
+      req.body.email,
+      "Job Application Submitted",
+      `<h2>Hello ${req.body.fullName},</h2>
+      <p>Thank you for applying for the position. We have received your application.</p>
+      <p>Our HR team will contact you soon.</p>
+      <br>
+      <p>Best Regards,<br>HR Team</p>`
+    );
+
+    /** ✅ Send email to HR **/
+    const hrEmail = req.session?.user?.email;
+    if (hrEmail) {
+      await sendMail(
+        hrEmail,
+        `New Job Application from ${req.body.fullName}`,
+        `<h2>New Job Application Details:</h2>
+        <p><strong>Name:</strong> ${req.body.fullName}</p>
+        <p><strong>Email:</strong> ${req.body.email}</p>
+        <p><strong>Phone:</strong> ${req.body.number}</p>
+        <p><strong>City:</strong> ${req.body.currentCity}</p>
+        <br>
+        <p>Check admin panel for full details.</p>`
+      );
+    }
+
+    return res.status(201).json({
       status: true,
       message: "Job form submitted successfully",
       data: newForm,
     });
   } catch (error) {
     console.error("createJobForm error:", error);
-    res.status(500).send({ status: false, message: error.message });
+    return res.status(500).json({ status: false, message: error.message });
   }
 };
 

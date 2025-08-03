@@ -19,7 +19,6 @@ const JobForm = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         isEmail: { msg: "Please enter a valid email" },
       },
@@ -47,9 +46,11 @@ const JobForm = sequelize.define(
     },
 
     currentAddress: DataTypes.STRING,
+    currentState: DataTypes.STRING,
     currentCity: DataTypes.STRING,
     currentPincode: DataTypes.STRING,
     permanentAddress: DataTypes.STRING,
+    permanentState: DataTypes.STRING,
     permanentCity: DataTypes.STRING,
     permanentPincode: DataTypes.STRING,
 

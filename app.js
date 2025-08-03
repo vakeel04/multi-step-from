@@ -26,11 +26,11 @@ env.config();
 // Session middleware
 app.use(
   session({
-    secret: "your_secret_key", // use a strong key in production
+    secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: false, // set to true if using HTTPS
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
@@ -44,6 +44,8 @@ app.use(cookieParser());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.static("public"));
 
 app.use("/jobForm", router);
 app.use("/", webRouter);
