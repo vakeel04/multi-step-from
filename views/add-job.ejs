@@ -108,7 +108,7 @@
 
             <div class="col-6 mt-4">
               <select name="interviewType" class="inputMain">
-                <option value="A2G">Interview Type</option>
+                <option value="Telephone">Interview Type</option>
                 <option value="Telephone">Telephone</option>
                 <option value="In person">In person</option>
                 <option value="video call">video call</option>
@@ -136,7 +136,7 @@
         <div class="d-flex gap-3 mt-4">
           <div class="inputMain">
             <label>Selection Date</label> <br />
-            <input name="date" type="text" class="border mt-1" />
+            <input name="date" type="date" class="border mt-1 form-control" required />
           </div>
 
           <div class="inputMain">
@@ -199,7 +199,14 @@
                 <td>
                   <%= form.jobRole %>
                 </td>
-                <td><a href="/multistep-form/<%= form.link %>" target="_blank">Link</a></td>
+                <td class="d-flex align-items-center gap-2">
+                  <a href="/multistep-form/<%= form.link %>" target="_blank">Link</a>
+
+                  <button class="btn btn-sm btn-light border" title="Copy link"
+                    onclick="copyToClipboard('<%= form.link %>', this)">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </td>
                 <td><a href="/candidate-detail/<%= form.link %>">Show Details</a></td>
               </tr>
               <% }); %>
@@ -232,6 +239,20 @@
       </div>
     </div>
   </section>
+
+  <script>
+    function copyToClipboard(link, btn) {
+      const fullUrl = `${window.location.origin}/multistep-form/${link}`;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+        }, 1500);
+      }).catch((err) => {
+        console.error("Copy failed", err);
+      });
+    }
+  </script>
   <script>
     // Add job input field
     function addJobInput() {

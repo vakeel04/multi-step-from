@@ -18,7 +18,10 @@ const createJob = async (req, res) => {
       link: rawLink,
       logo: companyLogo,
     };
-
+    req.session.job = {
+      companyName: companyName,
+      jobRole: req.body.jobRole,
+    };
     const newJob = await Job.create(payload);
     return res.status(201).json({
       status: true,

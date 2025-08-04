@@ -1,251 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <title>Multi-Step Job Application Form</title>
-    <style>
-      #multiStepForm {
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 15px;
-        border: solid 1px #39a2f8;
-        width: 100%;
-        max-width: 1000px;
-        margin: 30px auto;
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous" />
+  <title>Multi-Step Job Application Form</title>
+  <style>
+    #multiStepForm {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 15px;
+      border: solid 1px #39a2f8;
+      width: 100%;
+      max-width: 1000px;
+      margin: 30px auto;
+    }
+
+
+    #multiStepForm h5 {
+      margin-bottom: 15px;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    #form #div {
+      border-bottom: 2px solid #808080;
+      padding: 20px 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px !important;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: solid 1px #ccc;
+      outline: none;
+      border-radius: 8px;
+    }
+
+    .small-text {
+      font-size: 0.8em;
+      color: gray;
+    }
+
+    .next-step-button,
+    .sendOtpButton {
+      background-color: #39a2f8;
+      padding: 10px 30px;
+      border-radius: 13px;
+      font-size: 15px;
+      font-weight: 500;
+      border: solid 1px #39a2f8;
+      transition: 0.5s all ease-in-out;
+    }
+
+    .sendOtpButton {
+      padding: 5px 14px;
+      border-radius: 4px;
+      color: white;
+      font-size: 12px;
+      position: absolute;
+      right: 6px;
+      top: 5px;
+    }
+
+    .back-step-button {
+      background-color: #fff;
+      color: #39a2f8;
+      padding: 10px 30px;
+      border-radius: 13px;
+      font-size: 15px;
+      font-weight: 500;
+      border: solid 1px #39a2f8;
+      transition: 0.5s all ease-in-out;
+    }
+
+    .add-experience-btn {
+      color: #39a2f8;
+      font-size: 17px;
+      font-weight: 600;
+      background-color: #fff;
+      border: none;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      #multiStepForm h5 {
-        margin-bottom: 15px;
+      100% {
+        transform: rotate(360deg);
       }
+    }
 
-      .step {
-        display: none;
-      }
+    input.is-invalid {
+      border-color: #dc3545;
+      background-color: #f8d7da;
+    }
+  </style>
+</head>
 
-      .step.active {
-        display: block;
-      }
-
-      #form #div {
-        border-bottom: 2px solid #808080;
-        padding: 20px 0;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 15px !important;
-        font-weight: 500;
-      }
-
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        border: solid 1px #ccc;
-        outline: none;
-        border-radius: 8px;
-      }
-
-      .small-text {
-        font-size: 0.8em;
-        color: gray;
-      }
-
-      .next-step-button {
-        background-color: #39a2f8;
-        padding: 10px 30px;
-        border-radius: 13px;
-        font-size: 15px;
-        font-weight: 500;
-        border: solid 1px #39a2f8;
-        transition: 0.5s all ease-in-out;
-      }
-
-      .back-step-button {
-        background-color: #fff;
-        color: #39a2f8;
-        padding: 10px 30px;
-        border-radius: 13px;
-        font-size: 15px;
-        font-weight: 500;
-        border: solid 1px #39a2f8;
-        transition: 0.5s all ease-in-out;
-      }
-
-      .add-experience-btn {
-        color: #39a2f8;
-        font-size: 17px;
-        font-weight: 600;
-        background-color: #fff;
-        border: none;
-      }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div
-      style="
+<body>
+  <div style="
         background-image: url('https://img.freepik.com/free-vector/ombre-blue-curve-light-blue-background_53876-173299.jpg?semt=ais_hybrid&w=740');
         background-size: cover;
         height: 100px;
-      "
-    >
-      <h3 class="p-4">Onboarding Form</h3>
-    </div>
-    <div class="container-fluid">
-      <form id="multiStepForm" enctype="multipart/form-data">
-        <input type="hidden" name="link" value="<%=data?.link %>" />
-        <!-- Step 1: Personal Details -->
-        <div class="step active" id="step1">
-          <h5>Step 1: Personal Details</h5>
+      ">
+    <h3 class="p-4">Onboarding Form</h3>
+  </div>
+  <div class="container-fluid">
+    <form id="multiStepForm" enctype="multipart/form-data">
+      <input type="hidden" name="link" value="<%=data?.link %>" />
+      <!-- Step 1: Personal Details -->
+      <div class="step active" id="step1">
+        <h5>Step 1: Personal Details</h5>
+        <div class="row">
+          <!-- Full Name -->
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Full Name:</label>
+              <input type="text" name="fullName" value="<%=data?.job?.candidateName%>" required disabled />
+            </div>
+          </div>
+
+          <!-- Father's Name -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Father's Name:</label>
+              <input placeholder="Enter Father's Name..." type="text" name="fatherName" required />
+            </div>
+          </div>
+
+          <!-- Mother's Name -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Mother's Name:</label>
+              <input type="text" placeholder="Enter Mother's Name..." name="motherName" required />
+            </div>
+          </div>
+          <!-- Email Field -->
+          <div class="col-6">
+            <div class="form-group">
+              <label>Email Address:</label>
+              <div style="position: relative;">
+                <input placeholder="Enter Email..." type="email" name="email" id="email" required
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address"
+                  class="form-control" />
+                <button type="button" id="sendOtpBtn" class="sendOtpButton btn btn-primary">
+                  <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                  <span class="btn-text">Send OTP</span>
+                </button>
+              </div>
+              <small id="emailError" class="text-danger d-none">Invalid email address</small>
+            </div>
+          </div>
+
+          <!-- OTP Field -->
+          <div class="col-6">
+            <div class="form-group">
+              <label>OTP:</label>
+              <div style="position: relative;">
+                <input placeholder="Enter OTP..." type="text" name="otp" id="otp" required pattern="\d{4,6}"
+                  class="form-control" />
+                <button type="button" class="sendOtpButton btn btn-success" onclick="verifyOtp(this)">
+                  <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                  <span class="btn-text">Verify OTP</span>
+                </button>
+                <span id="otpStatus" class="text-success ms-2 fw-bold d-none">✅ Verified</span>
+              </div>
+              <small id="otpError" class="text-danger d-none">Invalid OTP</small>
+            </div>
+          </div>
+
+          <!-- Mobile Number -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Mobile Number:</label>
+              <div style="position: relative;">
+                <input placeholder="Enter Mobile Number..." type="text" name="number" class="form-control"
+                  pattern="[6-9]{1}[0-9]{9}" minlength="10" maxlength="10" required />
+                <button type="button" id="sendOtpBtn2" class="sendOtpButton btn btn-primary">
+                  <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                  <span class="btn-text">Send OTP</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- OTP Field -->
+          <div class="col-6">
+            <div class="form-group">
+              <label>OTP:</label>
+              <div style="position: relative;">
+                <input placeholder="Enter OTP..." type="text" name="otp" id="otp" required pattern="\d{4,6}"
+                  class="form-control" />
+                <button type="button" class="sendOtpButton btn btn-success" onclick="verifyOtp(this)">
+                  <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                  <span class="btn-text">Verify OTP</span>
+                </button>
+                <span id="otpStatus" class="text-success ms-2 fw-bold d-none">✅ Verified</span>
+              </div>
+              <small id="otpError" class="text-danger d-none">Invalid OTP</small>
+            </div>
+          </div>
+
+          <!-- Alternate Mobile Number -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Alternate Mobile Number:</label>
+              <input placeholder="Enter Alternate Mobile Number..." type="text" name="AlternateNumber"
+                class="form-control" pattern="[6-9]{1}[0-9]{9}" minlength="10" maxlength="10" required />
+            </div>
+          </div>
+
+          <!-- Father's Mobile Number -->
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Father's Mobile Number:</label>
+              <input placeholder="Father's Mobile Number..." type="text" name="fatherNumber" class="form-control"
+                pattern="[6-9]{1}[0-9]{9}" minlength="10" maxlength="10" required />
+            </div>
+          </div>
+
+          <!-- Mother's Mobile Number -->
+          <div class=" col-12">
+            <div class="form-group">
+              <label>Mother's Mobile Number:</label>
+              <input placeholder="Mother's Mobile Number..." type="text" name="motherNumber" class="form-control"
+                pattern="[6-9]{1}[0-9]{9}" minlength="10" maxlength="10" required />
+            </div>
+          </div>
+
+          <!-- Current Address -->
+          <!-- Current Address -->
+          <h5>Current Address</h5>
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Current Address:</label>
+              <textarea placeholder="Current Address..." name="currentAddress" id="currentAddress"></textarea>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-12">
+            <div class="form-group">
+              <label for="state">State:</label>
+              <select id="state" name="currentState" class="form-control" onchange="populateCities('current')">
+                <option value="">-- Select State --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-12">
+            <div class="form-group">
+              <label for="city">City:</label>
+              <select id="city" name="currentCity" class="form-control">
+                <option value="">-- Select City --</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 col-12">
+            <div class="form-group">
+              <label>Pincode:</label>
+              <input type="text" name="currentPincode" id="currentPincode" />
+            </div>
+          </div>
+
+          <!-- Permanent Address -->
+          <h5 class="mt-4">Permanent Address</h5>
+          <div class="col-md-12 col-12">
+            <div class="d-flex gap-2 align-items-center mb-3">
+              <input type="checkbox" id="sameAddress" onclick="copyAddress()" style="width: 15px" />
+              <label for="sameAddress" class="mb-0">Same as Current Address</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Permanent Address Section -->
+        <div id="permanentAddressFields">
           <div class="row">
-            <!-- Full Name -->
             <div class="col-md-12 col-12">
               <div class="form-group">
-                <label>Full Name:</label>
-                <input type="text" name="fullName" required />
+                <label>Address:</label>
+                <textarea name="permanentAddress" placeholder="Address..." id="permanentAddress"></textarea>
               </div>
             </div>
-
-            <!-- Father's Name -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Father's Name:</label>
-                <input type="text" name="fatherName" required />
-              </div>
-            </div>
-
-            <!-- Mother's Name -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Mother's Name:</label>
-                <input type="text" name="motherName" required />
-              </div>
-            </div>
-
-            <!-- Email -->
-            <div class="col-md-12 col-12">
-              <div class="form-group">
-                <label>Email Address:</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                  title="Please enter a valid email address"
-                />
-                <small id="emailError" class="text-danger d-none"
-                  >Invalid email address</small
-                >
-              </div>
-            </div>
-
-            <!-- Mobile Number -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Mobile Number:</label>
-                <input
-                  type="text"
-                  name="number"
-                  class="form-control"
-                  pattern="[6-9]{1}[0-9]{9}"
-                  minlength="10"
-                  maxlength="10"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Alternate Mobile Number -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Alternate Mobile Number:</label>
-                <input
-                  type="text"
-                  name="AlternateNumber"
-                  class="form-control"
-                  pattern="[6-9]{1}[0-9]{9}"
-                  minlength="10"
-                  maxlength="10"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Father's Mobile Number -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Father's Mobile Number:</label>
-                <input
-                  type="text"
-                  name="fatherNumber"
-                  class="form-control"
-                  pattern="[6-9]{1}[0-9]{9}"
-                  minlength="10"
-                  maxlength="10"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Mother's Mobile Number -->
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Mother's Mobile Number:</label>
-                <input
-                  type="text"
-                  name="motherNumber"
-                  class="form-control"
-                  pattern="[6-9]{1}[0-9]{9}"
-                  minlength="10"
-                  maxlength="10"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Current Address -->
-            <!-- Current Address -->
-            <h5>Current Address</h5>
-            <div class="col-md-12 col-12">
-              <div class="form-group">
-                <label>Current Address:</label>
-                <textarea name="currentAddress" id="currentAddress"></textarea>
-              </div>
-            </div>
-
             <div class="col-md-4 col-12">
               <div class="form-group">
-                <label for="state">State:</label>
-                <select
-                  id="state"
-                  name="currentState"
-                  class="form-control"
-                  onchange="populateCities('current')"
-                >
+                <label for="permanentState">State:</label>
+                <select id="permanentState" name="permanentState" class="form-control"
+                  onchange="populateCities('permanent')">
                   <option value="">-- Select State --</option>
                 </select>
               </div>
@@ -253,458 +315,260 @@
 
             <div class="col-md-4 col-12">
               <div class="form-group">
-                <label for="city">City:</label>
-                <select id="city" name="currentCity" class="form-control">
+                <label for="permanentCity">City:</label>
+                <select id="permanentCity" name="permanentCity" class="form-control">
                   <option value="">-- Select City --</option>
                 </select>
               </div>
             </div>
+
             <div class="col-md-4 col-12">
               <div class="form-group">
                 <label>Pincode:</label>
-                <input type="text" name="currentPincode" id="currentPincode" />
+                <input type="text" name="permanentPincode" />
               </div>
             </div>
-
-            <!-- Permanent Address -->
-            <h5 class="mt-4">Permanent Address</h5>
-            <div class="col-md-12 col-12">
-              <div class="d-flex gap-2 align-items-center mb-3">
-                <input
-                  type="checkbox"
-                  id="sameAddress"
-                  onclick="copyAddress()"
-                  style="width: 15px"
-                />
-                <label for="sameAddress" class="mb-0"
-                  >Same as Current Address</label
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Permanent Address Section -->
-          <div id="permanentAddressFields">
-            <div class="row">
-              <div class="col-md-12 col-12">
-                <div class="form-group">
-                  <label>Address:</label>
-                  <textarea
-                    name="permanentAddress"
-                    id="permanentAddress"
-                  ></textarea>
-                </div>
-              </div>
-              <div class="col-md-4 col-12">
-                <div class="form-group">
-                  <label for="permanentState">State:</label>
-                  <select
-                    id="permanentState"
-                    name="permanentState"
-                    class="form-control"
-                    onchange="populateCities('permanent')"
-                  >
-                    <option value="">-- Select State --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-4 col-12">
-                <div class="form-group">
-                  <label for="permanentCity">City:</label>
-                  <select
-                    id="permanentCity"
-                    name="permanentCity"
-                    class="form-control"
-                  >
-                    <option value="">-- Select City --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-4 col-12">
-                <div class="form-group">
-                  <label>Pincode:</label>
-                  <input type="text" name="permanentPincode" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <button
-              type="button"
-              onclick="nextStep(1)"
-              class="next-step-button"
-            >
-              Next
-            </button>
           </div>
         </div>
 
-        <!-- Step 2: Document Uploading -->
-        <div class="step" id="step2">
-          <h5>Step 2: Document Uploading</h5>
-          <div class="row">
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Pan Card Front:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    accept=".pdf, image/*"
-                    name="panFront"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Pan Card Back:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    accept=".pdf, image/*"
-                    name="panBack"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Aadhar Card Front:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    accept=".pdf, image/*"
-                    name="aadharFront"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
-              </div>
-            </div>
+        <div class="mt-4">
+          <button type="button" onclick="nextStep(1)" class="next-step-button">
+            Next
+          </button>
+        </div>
+      </div>
 
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Aadhar Card Back:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    accept=".pdf, image/*"
-                    name="aadharBack"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
+      <!-- Step 2: Document Uploading -->
+      <div class="step" id="step2">
+        <h5>Step 2: Document Uploading</h5>
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Pan Card Front:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="panFront" required onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
               </div>
             </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>10th Marksheet:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    accept=".pdf, image/*"
-                    name="marksheet10"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Pan Card Back:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="panBack" required onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
               </div>
             </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>12th Marksheet:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    name="marksheet12"
-                    required
-                    accept=".pdf, image/*"
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Aadhar Card Front:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="aadharFront" required onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
               </div>
             </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Last Qualification:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="text"
-                    name="lastQualification"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
-              </div>
-            </div>
+          </div>
 
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Upload Last Qualification Marksheet:</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input
-                    type="file"
-                    name="lastQualificationMarksheet"
-                    accept=".pdf, image/*"
-                    required
-                    onchange="showCheck(this)"
-                  />
-                  <span
-                    class="check-icon text-success fw-bold"
-                    style="display: none"
-                    >&#10004;</span
-                  >
-                </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Aadhar Card Back:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="aadharBack" required onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
               </div>
             </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>10th Marksheet:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" accept=".pdf, image/*" name="marksheet10" required onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>12th Marksheet:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" name="marksheet12" required accept=".pdf, image/*" onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Last Qualification:</label>
+              <div class="d-flex align-items-center gap-2">
+                <select name="lastQualification" required onchange="showCheck(this)" class="form-select">
+                  <option value="">Select Qualification</option>
+                  <option value="10th">10th</option>
+                  <option value="12th">12th</option>
+                  <option value="Diploma">Diploma</option>
+                  <option value="Graduation">Graduation</option>
+                  <option value="Post Graduation">Post Graduation</option>
+                  <option value="PhD">PhD</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
+              </div>
+            </div>
+          </div>
 
-            <div class="col-md-12 col-12">
-              <div class="form-group">
-                <label>Are you:</label>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Upload Last Qualification Marksheet:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="file" name="lastQualificationMarksheet" accept=".pdf, image/*" required
+                  onchange="showCheck(this)" />
+                <span class="check-icon text-success fw-bold" style="display: none">&#10004;</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Are you:</label>
+              <div class="d-flex gap-2 align-items-center">
                 <div class="d-flex gap-2 align-items-center">
-                  <div class="d-flex gap-2 align-items-center">
-                    <input
-                      type="radio"
-                      name="experienceType"
-                      value="fresher"
-                      onclick="toggleExperience(true)"
-                    />
-                    <span>Fresher</span>
-                  </div>
-                  <div class="d-flex gap-2 align-items-center">
-                    <input
-                      type="radio"
-                      name="experienceType"
-                      value="experienced"
-                      onclick="toggleExperience(false)"
-                    />
-                    <span>Experienced</span>
-                  </div>
+                  <input type="radio" name="experienceType" value="fresher" onclick="toggleExperience(true)" />
+                  <span>Fresher</span>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <input type="radio" name="experienceType" value="experienced" onclick="toggleExperience(false)" />
+                  <span>Experienced</span>
                 </div>
               </div>
             </div>
           </div>
-          <div class="mt-4">
-            <button
-              type="button"
-              onclick="prevStep(0)"
-              class="back-step-button"
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              onclick="nextStep(2)"
-              class="next-step-button"
-            >
-              Next
-            </button>
+        </div>
+        <div class="mt-4">
+          <button type="button" onclick="prevStep(0)" class="back-step-button">
+            Back
+          </button>
+          <button type="button" onclick="nextStep(2)" class="next-step-button">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Professional Background -->
+      <div class="step" id="step3">
+        <h5>Step 3: Professional Background</h5>
+        <div id="fresherSection" style="display: none">
+          <label>Upload Your CV:</label>
+          <input type="file" name="fresherCV" accept=".pdf" />
+          <div class="small-text">*pdf</div>
+        </div>
+
+        <div id="experience-container">
+          <!-- Resume Upload -->
+          <div class="mb-3 mt-5">
+            <label>Upload Your CV/Resume</label>
+            <input type="file" name="resume" class="form-control" accept=".pdf" />
+            <small class="form-text text-muted">*pdf</small>
+          </div>
+
+          <h4>Experience</h4>
+
+          <div id="form"></div>
+
+
+        </div>
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">
+          + Add Experience
+        </button>
+        <div class="mt-4">
+          <button type="button" onclick="prevStep(1)" class="back-step-button">
+            Back
+          </button>
+          <button type="button" onclick="nextStep(3)" class="next-step-button">
+            Next
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Step 4: Job Role in A2G -->
+      <div class="step" id="step4">
+        <h5>
+          Step 4: Job Role in <%= data?.job?.companyName || "Company" %>
+        </h5>
+
+        <div class="company-header-container mb-3">
+          <img src="/images/<%= data?.job?.logo %>" alt="company-logo"
+            style="width: 100%; max-width: 150px; object-fit: cover" />
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Job Profile:</label>
+              <input type="text" name="jobProfile" class="form-control" value="<%= data?.job?.jobRole %>" readonly />
+            </div>
+          </div>
+
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Salary Offered:</label>
+              <input type="text" name="salary" class="form-control" value="<%= data?.job?.OfferedSalary %>" readonly />
+            </div>
+          </div>
+
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Referred by (HR Name):</label>
+              <input type="text" name="referredBy" class="form-control" value="<%= data?.job?.hrName %>" readonly />
+            </div>
+          </div>
+
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Interview Date:</label>
+              <input type="text" name="interviewDate" class="form-control" value="<%= data?.job?.date %>" readonly />
+            </div>
+          </div>
+
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label>Interview Type:</label>
+              <input type="text" name="interviewType" class="form-control" value="<%= data?.job?.interviewType %>"
+                readonly />
+            </div>
           </div>
         </div>
 
-        <!-- Step 3: Professional Background -->
-        <div class="step" id="step3">
-          <h5>Step 3: Professional Background</h5>
-          <div id="fresherSection" style="display: none">
-            <label>Upload Your CV:</label>
-            <input type="file" name="fresherCV" accept=".pdf" />
-            <div class="small-text">*pdf</div>
-          </div>
+        <div class="my-3">
+          <button type="button" class="next-step-button bg-success">
+            This details is corerct?
+          </button>
 
-          <div id="experience-container">
-            <!-- Resume Upload -->
-            <div class="mb-3 mt-5">
-              <label>Upload Your CV/Resume</label>
-              <input
-                type="file"
-                name="resume"
-                class="form-control"
-                accept=".pdf"
-              />
-              <small class="form-text text-muted">*pdf</small>
-            </div>
-
-            <button
-              type="button"
-              class="btn btn-secondary mb-3"
-              onclick="addExperience()"
-            >
-              + Add Experience
-            </button>
-            <h4>Experience</h4>
-
-            <div id="form"></div>
-          </div>
-          <div class="mt-4">
-            <button
-              type="button"
-              onclick="prevStep(1)"
-              class="back-step-button"
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              onclick="nextStep(3)"
-              class="next-step-button"
-            >
-              Next
-            </button>
-          </div>
+          <button type="button" class="next-step-button bg-danger">
+            This details is not correct?
+          </button>
         </div>
 
-        <!-- Step 4: Job Role in A2G -->
-        <div class="step" id="step4">
-          <h5>
-            Step 4: Job Role in <%= data?.job?.companyName || "Company" %>
-          </h5>
+        <small>
+          <input type="checkbox" id="agree" style="width: 10px" /> I agree to
+          the <a href="#" target="_blank">Privacy Policy</a> and
+          <a href="#" target="_blank">Terms & Conditions</a>.
+        </small>
 
-          <div class="company-header-container mb-3">
-            <img
-              src="/images/<%= data?.job?.logo %>"
-              alt="company-logo"
-              style="width: 100%; max-width: 150px; object-fit: cover"
-            />
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Job Profile:</label>
-                <input
-                  type="text"
-                  name="jobProfile"
-                  class="form-control"
-                  value="<%= data?.job?.jobRole %>"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Salary Offered:</label>
-                <input
-                  type="text"
-                  name="salary"
-                  class="form-control"
-                  value="<%= data?.job?.OfferedSalary %>"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <div class="col-md-12 col-12">
-              <div class="form-group">
-                <label>Referred by (HR Name):</label>
-                <input
-                  type="text"
-                  name="referredBy"
-                  class="form-control"
-                  value="<%= data?.job?.hrName %>"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Interview Date:</label>
-                <input
-                  type="text"
-                  name="interviewDate"
-                  class="form-control"
-                  value="<%= data?.job?.date %>"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <label>Interview Type:</label>
-                <input
-                  type="text"
-                  name="interviewType"
-                  class="form-control"
-                  value="<%= data?.job?.interviewType %>"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-
-          <small>
-            <input type="checkbox" id="agree" style="width: 10px" /> I agree to
-            the <a href="#" target="_blank">Privacy Policy</a> and
-            <a href="#" target="_blank">Terms & Conditions</a>.
-          </small>
-
-          <div class="mt-4">
-            <button
-              type="button"
-              onclick="prevStep(2)"
-              class="back-step-button"
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              onclick="submitForm()"
-              class="next-step-button"
-            >
-              Submit
-            </button>
-          </div>
+        <div class="mt-4">
+          <button type="button" onclick="prevStep(2)" class="back-step-button">
+            Back
+          </button>
+          <button type="button" onclick="submitForm()" class="next-step-button">
+            Submit
+          </button>
         </div>
-      </form>
-    </div>
-    <!-- Popup -->
-    <div
-      id="popupAccept"
-      style="
+      </div>
+    </form>
+  </div>
+  <!-- Popup -->
+  <div id="popupAccept" style="
         display: none;
         position: fixed;
         top: 0;
@@ -714,22 +578,18 @@
         background: rgba(0, 0, 0, 0.5);
         padding: 5px;
         z-index: 9999;
-      "
-    >
-      <div
-        style="
+      ">
+    <div style="
           background: #fff;
           margin: 100px auto;
           padding: 20px;
           width: 100%;
           max-width: 500px;
           text-align: center;
-        "
-      >
-        <!-- Spinner -->
-        <div id="loadingSpinner" style="margin-bottom: 15px">
-          <div
-            style="
+        ">
+      <!-- Spinner -->
+      <div id="loadingSpinner" style="margin-bottom: 15px">
+        <div style="
               border: 6px solid #f3f3f3;
               border-top: 6px solid #4caf50;
               border-radius: 50%;
@@ -737,458 +597,619 @@
               height: 50px;
               animation: spin 1s linear infinite;
               margin: auto;
-            "
-          ></div>
-        </div>
-
-        <!-- Success Icon -->
-        <img
-          id="successIcon"
-          src="https://cdn2.iconfinder.com/data/icons/greenline/512/check-512.png"
-          style="width: 100%; max-width: 80px; display: none"
-        />
-
-        <!-- Message -->
-        <h5 id="popupMessage" class="mt-3 mb-4">
-          Submitting your form... Please wait.
-        </h5>
-
-        <!-- Close Button -->
-        <button
-          id="popupCloseBtn"
-          class="next-step-button w-100 mt-3"
-          style="display: none"
-          onclick="closePopup()"
-        >
-          OK
-        </button>
+            "></div>
       </div>
+
+      <!-- Success Icon -->
+      <img id="successIcon" src="https://cdn2.iconfinder.com/data/icons/greenline/512/check-512.png"
+        style="width: 100%; max-width: 80px; display: none" />
+
+      <!-- Message -->
+      <h5 id="popupMessage" class="mt-3 mb-4">
+        Submitting your form... Please wait.
+      </h5>
+
+      <!-- Close Button -->
+      <button id="popupCloseBtn" class="next-step-button w-100 mt-3" style="display: none" onclick="closePopup()">
+        OK
+      </button>
     </div>
+  </div>
+  <script>
+    let otpCooldownTimer = null;
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      let currentStep = 0;
-      const steps = document.querySelectorAll(".step");
+    // Attach event listeners
+    document.getElementById("sendOtpBtn").addEventListener("click", function () {
+      sendOtp(this);
+    });
 
-      // ✅ Go to next step
-      function nextStep(index) {
-        steps[currentStep].classList.remove("active");
-        currentStep = index;
-        steps[currentStep].classList.add("active");
+    document.getElementById("otp").addEventListener("input", () => {
+      document.getElementById("otpStatus").classList.add("d-none");
+    });
+
+    async function sendOtp(button) {
+      const emailInput = document.getElementById("email");
+      const email = emailInput.value.trim();
+      const emailError = document.getElementById("emailError");
+
+      if (!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+        emailError.classList.remove("d-none");
+        return;
+      } else {
+        emailError.classList.add("d-none");
       }
 
-      // ✅ Go to previous step
-      function prevStep(index) {
-        steps[currentStep].classList.remove("active");
-        currentStep = index;
-        steps[currentStep].classList.add("active");
+      const spinner = button.querySelector(".spinner-border");
+      const btnText = button.querySelector(".btn-text");
+
+      spinner.classList.remove("d-none");
+      btnText.textContent = "Sending...";
+      button.disabled = true;
+
+      try {
+        const res = await fetch("/send-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await res.json();
+        // alert(data.message);
+
+
+        startOtpCooldown(button, 300);
+      } catch (err) {
+        alert("Error sending OTP");
+        button.disabled = false;
+        btnText.textContent = "Send OTP";
+      } finally {
+        spinner.classList.add("d-none");
       }
+    }
 
-      // ✅ Copy Current Address to Permanent Address
-      function copyAddress() {
-        const isChecked = document.getElementById("sameAddress").checked;
-        const permanentFields = document.getElementById(
-          "permanentAddressFields"
-        );
+    function startOtpCooldown(button, durationInSeconds) {
+      let remaining = durationInSeconds;
+      const btnText = button.querySelector(".btn-text");
 
-        if (isChecked) {
-          document.querySelector('[name="permanentAddress"]').value =
-            document.querySelector('[name="currentAddress"]').value;
+      button.disabled = true;
+      updateCountdownText(btnText, remaining);
 
-          document.querySelector('[name="permanentState"]').value =
-            document.querySelector('[name="currentState"]').value;
+      otpCooldownTimer = setInterval(() => {
+        remaining--;
 
-          document.querySelector('[name="permanentCity"]').value =
-            document.querySelector('[name="currentCity"]').value;
-
-          document.querySelector('[name="permanentPincode"]').value =
-            document.querySelector('[name="currentPincode"]').value;
-
-          permanentFields.style.display = "none";
+        if (remaining <= 0) {
+          clearInterval(otpCooldownTimer);
+          button.disabled = false;
+          btnText.textContent = "Resend OTP";
         } else {
-          document.querySelector('[name="permanentAddress"]').value = "";
-          document.querySelector('[name="permanentState"]').value = "";
-          document.querySelector('[name="permanentCity"]').value = "";
-          document.querySelector('[name="permanentPincode"]').value = "";
-
-          permanentFields.style.display = "block";
+          updateCountdownText(btnText, remaining);
         }
+      }, 1000);
+    }
+
+    function updateCountdownText(element, secondsLeft) {
+      const mins = Math.floor(secondsLeft / 60);
+      const secs = secondsLeft % 60;
+      element.textContent = `Wait ${mins}:${secs.toString().padStart(2, "0")}`;
+    }
+
+    async function verifyOtp(button) {
+      const email = document.getElementById("email").value.trim();
+      const otp = document.getElementById("otp").value.trim();
+      const otpError = document.getElementById("otpError");
+      const otpStatus = document.getElementById("otpStatus");
+
+      if (!otp || !/^\d{4,6}$/.test(otp)) {
+        otpError.classList.remove("d-none");
+        return;
+      } else {
+        otpError.classList.add("d-none");
       }
 
-      // ✅ Show/Hide experience section
-      function toggleExperience(isFresher) {
-        document.getElementById("fresherSection").style.display = isFresher
-          ? "block"
-          : "none";
-        document.getElementById("experience-container").style.display =
-          isFresher ? "none" : "block";
+      const spinner = button.querySelector(".spinner-border");
+      const btnText = button.querySelector(".btn-text");
 
-        if (!isFresher) {
-          addExperience();
+      spinner.classList.remove("d-none");
+      btnText.textContent = "Verifying...";
+      button.disabled = true;
+
+      try {
+        const res = await fetch("/verify-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, otp }),
+        });
+
+        const data = await res.json();
+        // alert(data.message);
+
+        if (data.status) {
+          otpStatus.classList.remove("d-none");
+          btnText.textContent = "Verified ✅";
+        } else {
+          otpStatus.classList.add("d-none");
+          btnText.textContent = "Verify OTP";
+          button.disabled = false;
         }
+      } catch (err) {
+        alert("Error verifying OTP");
+        btnText.textContent = "Verify OTP";
+        button.disabled = false;
+      } finally {
+        spinner.classList.add("d-none");
       }
+    }
+  </script>
 
-      let expIndex = 0;
 
-      // ✅ Add Experience Row
-      function addExperience() {
-        const container = document.getElementById("experience-container");
 
-        const html = `
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+  <script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll(".step");
+
+    // ✅ Go to next step
+    function nextStep(index) {
+      steps[currentStep].classList.remove("active");
+      currentStep = index;
+      steps[currentStep].classList.add("active");
+    }
+
+    // ✅ Go to previous step
+    function prevStep(index) {
+      steps[currentStep].classList.remove("active");
+      currentStep = index;
+      steps[currentStep].classList.add("active");
+    }
+
+    // ✅ Copy Current Address to Permanent Address
+    function copyAddress() {
+      const isChecked = document.getElementById("sameAddress").checked;
+      const permanentFields = document.getElementById(
+        "permanentAddressFields"
+      );
+
+      if (isChecked) {
+        document.querySelector('[name="permanentAddress"]').value =
+          document.querySelector('[name="currentAddress"]').value;
+
+        document.querySelector('[name="permanentState"]').value =
+          document.querySelector('[name="currentState"]').value;
+
+        document.querySelector('[name="permanentCity"]').value =
+          document.querySelector('[name="currentCity"]').value;
+
+        document.querySelector('[name="permanentPincode"]').value =
+          document.querySelector('[name="currentPincode"]').value;
+
+        permanentFields.style.display = "none";
+      } else {
+        document.querySelector('[name="permanentAddress"]').value = "";
+        document.querySelector('[name="permanentState"]').value = "";
+        document.querySelector('[name="permanentCity"]').value = "";
+        document.querySelector('[name="permanentPincode"]').value = "";
+
+        permanentFields.style.display = "block";
+      }
+    }
+
+    // ✅ Show/Hide experience section
+    function toggleExperience(isFresher) {
+      document.getElementById("fresherSection").style.display = isFresher
+        ? "block"
+        : "none";
+      document.getElementById("experience-container").style.display =
+        isFresher ? "none" : "block";
+
+      if (!isFresher) {
+        addExperience();
+      }
+    }
+
+    let expIndex = 0;
+
+    // ✅ Add Experience Row
+    function addExperience() {
+      const container = document.getElementById("experience-container");
+
+      const html = `
 <div class="experience-wrapper mb-3" id="experience-${expIndex}">
   <div class="row g-3 experience-group">
     <div class="col-md-6">
       <label>Company Name:</label>
-      <input type="text" name="experiences[${expIndex}][companyName]" class="form-control" required />
+      <input placeholder="Company Name..." type="text" name="experiences[${expIndex}][companyName]" class="form-control" required />
     </div>
     <div class="col-md-6">
       <label>Job Role/Position:</label>
-      <input type="text" name="experiences[${expIndex}][jobRole]" class="form-control" required />
+      <input placeholder="Company Job Role/Position..." type="text" name="experiences[${expIndex}][jobRole]" class="form-control" required />
     </div>
 
     <div class="col-md-6">
       <label>Location:</label>
-      <input type="text" name="experiences[${expIndex}][location]" class="form-control" required />
+      <input placeholder="Company Location..." type="text" name="experiences[${expIndex}][location]" class="form-control" required />
     </div>
 
     <div class="col-md-3">
-      <label>Joining Date:</label>
-      <input type="date" name="experiences[${expIndex}][joiningDate]" class="form-control" id="joiningDate-${expIndex}" required onchange="calculateExperience(${expIndex})" />
-    </div>
+    <label>Joining Date:</label>
+    <input
+      type="date"
+      name="experiences[${expIndex}][joiningDate]"
+      class="form-control"
+      id="joiningDate-${expIndex}"
+      required
+      onchange="calculateExperience(${expIndex})"
+      placeholder="Select joining date"
+    />
+  </div>
 
-    <div class="col-md-3">
-      <label>End Date:</label>
-      <input type="date" name="experiences[${expIndex}][endDate]" class="form-control" id="endDate-${expIndex}" required onchange="calculateExperience(${expIndex})" />
-    </div>
+  <div class="col-md-3">
+    <label>End Date:</label>
+    <input
+      type="date"
+      name="experiences[${expIndex}][endDate]"
+      class="form-control"
+      id="endDate-${expIndex}"
+      required
+      onchange="calculateExperience(${expIndex})"
+      placeholder="Select end date"
+    />
+  </div>
 
-    <div class="col-md-12">
-      <label>Total Experience (YEAR, MONTH):</label>
-      <input type="text" name="experiences[${expIndex}][experienceDays]" class="form-control" id="experienceResult-${expIndex}" readonly />
-    </div>
+  <div class="col-md-12">
+    <label>Total Experience (YEAR, MONTH):</label>
+    <input
+      type="text"
+      name="experiences[${expIndex}][experienceDays]"
+      class="form-control"
+      id="experienceResult-${expIndex}"
+      readonly
+      placeholder="Total experience will be calculated"
+    />
+  </div>
 
-    <div class="col-md-12 text-end">
-      <button type="button" class="btn btn-danger btn-sm" onclick="removeExperience(this)">Remove Experience</button>
-    </div>
+  <div class="col-md-12 text-end">
+    <button
+      type="button"
+      class="btn btn-danger btn-sm"
+      onclick="removeExperience(this)"
+    >
+      Remove Experience
+    </button>
+  </div>
+
   </div>
 </div>
 `;
 
-        container.insertAdjacentHTML("beforeend", html);
-        expIndex++;
+      container.insertAdjacentHTML("beforeend", html);
+      expIndex++;
+    }
+
+    // ✅ Remove Experience Row
+    function removeExperience(button) {
+      const wrapper = button.closest(".experience-wrapper");
+      if (wrapper) wrapper.remove();
+    }
+
+    // ✅ Placeholder function for popup
+    function showPopup() {
+      document.getElementById("popupAccept").style.display = "block";
+    }
+
+    // ✅ On page load, set correct address state
+    document.addEventListener("DOMContentLoaded", function () {
+      copyAddress();
+    });
+  </script>
+
+  <script>
+    const pathParts = window.location.pathname.split("/");
+    const link = pathParts[pathParts.length - 1];
+
+    // ✅ Show Popup with Loading Spinner
+    function showPopup() {
+      document.getElementById("popupAccept").style.display = "block";
+      document.getElementById("popupMessage").innerText =
+        "Submitting your form... Please wait.";
+      document.getElementById("loadingSpinner").style.display = "block";
+      document.getElementById("successIcon").style.display = "none";
+      document.getElementById("popupCloseBtn").style.display = "none";
+    }
+
+    // ✅ Show Success Message
+    function showSuccess() {
+      document.getElementById("popupMessage").innerText =
+        "Your form has been submitted. Our HR will contact you soon.";
+      document.getElementById("loadingSpinner").style.display = "none";
+      document.getElementById("successIcon").style.display = "block";
+      document.getElementById("popupCloseBtn").style.display = "block";
+    }
+
+    // ✅ Close Popup
+    function closePopup() {
+      document.getElementById("popupAccept").style.display = "none";
+    }
+
+    // ✅ Form Submit
+    async function submitForm() {
+      const agree = document.getElementById("agree");
+      if (!agree.checked) {
+        alert("Please agree to the Privacy Policy and Terms & Conditions.");
+        return;
       }
 
-      // ✅ Remove Experience Row
-      function removeExperience(button) {
-        const wrapper = button.closest(".experience-wrapper");
-        if (wrapper) wrapper.remove();
-      }
+      showPopup(); // ✅ Show loading state
 
-      // ✅ Placeholder function for popup
-      function showPopup() {
-        document.getElementById("popupAccept").style.display = "block";
-      }
+      const form = document.getElementById("multiStepForm");
+      const formData = new FormData(form);
 
-      // ✅ On page load, set correct address state
-      document.addEventListener("DOMContentLoaded", function () {
-        copyAddress();
-      });
-    </script>
-
-    <script>
-      const pathParts = window.location.pathname.split("/");
-      const link = pathParts[pathParts.length - 1];
-
-      // ✅ Show Popup with Loading Spinner
-      function showPopup() {
-        document.getElementById("popupAccept").style.display = "block";
-        document.getElementById("popupMessage").innerText =
-          "Submitting your form... Please wait.";
-        document.getElementById("loadingSpinner").style.display = "block";
-        document.getElementById("successIcon").style.display = "none";
-        document.getElementById("popupCloseBtn").style.display = "none";
-      }
-
-      // ✅ Show Success Message
-      function showSuccess() {
-        document.getElementById("popupMessage").innerText =
-          "Your form has been submitted. Our HR will contact you soon.";
-        document.getElementById("loadingSpinner").style.display = "none";
-        document.getElementById("successIcon").style.display = "block";
-        document.getElementById("popupCloseBtn").style.display = "block";
-      }
-
-      // ✅ Close Popup
-      function closePopup() {
-        document.getElementById("popupAccept").style.display = "none";
-      }
-
-      // ✅ Form Submit
-      async function submitForm() {
-        const agree = document.getElementById("agree");
-        if (!agree.checked) {
-          alert("Please agree to the Privacy Policy and Terms & Conditions.");
-          return;
-        }
-
-        showPopup(); // ✅ Show loading state
-
-        const form = document.getElementById("multiStepForm");
-        const formData = new FormData(form);
-
-        try {
-          const response = await fetch(`/jobForm/${link}`, {
-            method: "POST",
-            body: formData,
-          });
-
-          const result = await response.json();
-          console.log("Server Response:", result);
-
-          if (result.status) {
-            showSuccess();
-
-            // ✅ Reset Form after success
-            form.reset();
-            steps.forEach((step) => step.classList.remove("active"));
-            currentStep = 0;
-            steps[currentStep].classList.add("active");
-
-            // ✅ Auto close popup after 3 seconds
-            setTimeout(() => closePopup(), 3000);
-          } else {
-            alert(result.message || "Something went wrong. Try again.");
-            closePopup();
-          }
-        } catch (error) {
-          console.error("Submission error:", error);
-          alert("An error occurred. Please try again.");
-          closePopup();
-        }
-      }
-
-      // ✅ Multi-step validation
-      // ✅ Multi-step validation
-      function nextStep(index) {
-        const currentForm = steps[currentStep];
-        const requiredFields = currentForm.querySelectorAll(
-          "input[required], select[required], textarea[required]"
-        );
-        let isValid = true;
-
-        const mobileRegex = /^[6-9]\d{9}$/;
-        const emailField = document.getElementById("email");
-        const gmailPattern = /^[a-z0-9._%+-]+@gmail\.com$/i; // ✅ Only Gmail
-
-        requiredFields.forEach((field) => {
-          const value = field.value.trim();
-          const name = field.name;
-
-          if (!value) {
-            field.style.border = "1px solid red";
-            isValid = false;
-          } else if (
-            (name === "number" ||
-              name === "AlternateNumber" ||
-              name === "fatherNumber" ||
-              name === "motherNumber") &&
-            !mobileRegex.test(value)
-          ) {
-            field.style.border = "1px solid red";
-            isValid = false;
-          } else {
-            field.style.border = "1px solid #ccc";
-          }
+      try {
+        const response = await fetch(`/jobForm/${link}`, {
+          method: "POST",
+          body: formData,
         });
 
-        //  Gmail-specific email validation
-        if (emailField && !gmailPattern.test(emailField.value)) {
-          emailField.style.border = "1px solid red";
-          document.getElementById("emailError").textContent =
-            "Please enter a valid Gmail address (e.g., user@gmail.com)";
-          document.getElementById("emailError").classList.remove("d-none");
-          isValid = false;
-        } else if (emailField) {
-          document.getElementById("emailError").classList.add("d-none");
-        }
+        const result = await response.json();
+        console.log("Server Response:", result);
 
-        if (!isValid) {
-          alert("Please fill all required fields correctly before proceeding.");
-          return;
-        }
+        if (result.status) {
+          showSuccess();
 
-        steps[currentStep].classList.remove("active");
-        currentStep = index;
-        steps[currentStep].classList.add("active");
-      }
-    </script>
+          // ✅ Reset Form after success
+          form.reset();
+          steps.forEach((step) => step.classList.remove("active"));
+          currentStep = 0;
+          steps[currentStep].classList.add("active");
 
-    <script>
-      function showCheck(input) {
-        const checkIcon = input.nextElementSibling;
-        if (input.files && input.files.length > 0) {
-          checkIcon.style.display = "inline-block";
+          // ✅ Auto close popup after 3 seconds
+          setTimeout(() => closePopup(), 3000);
         } else {
-          checkIcon.style.display = "none";
+          alert(result.message || "Something went wrong. Try again.");
+          closePopup();
         }
+      } catch (error) {
+        console.error("Submission error:", error);
+        alert("An error occurred. Please try again.");
+        closePopup();
       }
-    </script>
+    }
 
-    <script>
-      function calculateExperience(index) {
-        const joiningDate = document.getElementById(
-          `joiningDate-${index}`
-        ).value;
-        const endDate = document.getElementById(`endDate-${index}`).value;
+    // ✅ Multi-step validation
+    // ✅ Multi-step validation
+    function nextStep(index) {
+      const currentForm = steps[currentStep];
+      const requiredFields = currentForm.querySelectorAll(
+        "input[required], select[required], textarea[required]"
+      );
 
-        if (!joiningDate || !endDate) return;
+      const mobileRegex = /^[6-9]\d{9}$/;
+      const gmailRegex = /^[a-z0-9._%+-]+@gmail\.com$/i;
+      let isValid = true;
 
-        const start = new Date(joiningDate);
-        const end = new Date(endDate);
+      requiredFields.forEach((field) => {
+        const value = field.value.trim();
+        const name = field.name;
+        const errorElement = field.nextElementSibling;
 
-        if (end < start) {
-          document.getElementById(`experienceResult-${index}`).value =
-            "Invalid date range";
-          return;
+        // Remove existing error if any
+        field.style.border = "";
+        if (errorElement?.tagName === "SMALL") {
+          errorElement.classList.add("d-none");
         }
 
-        let years = end.getFullYear() - start.getFullYear();
-        let months = end.getMonth() - start.getMonth();
-
-        if (months < 0) {
-          years--;
-          months += 12;
+        if (!value) {
+          showFieldError(field, "This field is required.");
+        } else if (
+          ["number", "AlternateNumber", "fatherNumber", "motherNumber"].includes(name) &&
+          !mobileRegex.test(value)
+        ) {
+          showFieldError(field, "Please enter a valid 10-digit mobile number.");
+        } else if (name === "email" && !gmailRegex.test(value)) {
+          showFieldError(field, "Please enter a valid Gmail address (e.g., user@gmail.com)");
         }
-
-        document.getElementById(
-          `experienceResult-${index}`
-        ).value = `${years} YEAR${years !== 1 ? "S" : ""}, ${months} MONTH${
-          months !== 1 ? "S" : ""
-        }`;
-      }
-    </script>
-    <script>
-      function showCheck(input) {
-        const checkIcon = input.nextElementSibling;
-
-        // Allowed MIME types
-        const allowedTypes = [
-          "application/pdf",
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/gif",
-          "image/webp",
-        ];
-
-        if (input.files && input.files.length > 0) {
-          const file = input.files[0];
-
-          if (!allowedTypes.includes(file.type)) {
-            alert(
-              " Only PDF and image files (jpg, png, gif, webp) are allowed."
-            );
-            input.value = ""; // Clear the invalid file
-            checkIcon.style.display = "none";
-            return;
-          }
-
-          // If file type is allowed
-          checkIcon.style.display = "inline-block";
-        } else {
-          checkIcon.style.display = "none";
-        }
-      }
-    </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("/districts.json")
-          .then((response) => response.json())
-          .then((data) => {
-            const stateCityMap = {};
-            data.districts.forEach((item) => {
-              if (!stateCityMap[item.state]) {
-                stateCityMap[item.state] = [];
-              }
-              stateCityMap[item.state].push(item.district);
-            });
-
-            const currentStateSelect = document.getElementById("state");
-            const currentCitySelect = document.getElementById("city");
-            const permanentStateSelect =
-              document.getElementById("permanentState");
-            const permanentCitySelect =
-              document.getElementById("permanentCity");
-
-            // Populate states for both dropdowns
-            Object.keys(stateCityMap).forEach((state) => {
-              const option1 = document.createElement("option");
-              option1.value = state;
-              option1.textContent = state;
-              currentStateSelect.appendChild(option1);
-
-              const option2 = document.createElement("option");
-              option2.value = state;
-              option2.textContent = state;
-              permanentStateSelect.appendChild(option2);
-            });
-
-            // Populate cities function
-            window.populateCities = function (type) {
-              let stateSelect, citySelect;
-              if (type === "current") {
-                stateSelect = currentStateSelect;
-                citySelect = currentCitySelect;
-              } else {
-                stateSelect = permanentStateSelect;
-                citySelect = permanentCitySelect;
-              }
-
-              const selectedState = stateSelect.value;
-              citySelect.innerHTML =
-                '<option value="">-- Select City --</option>';
-              if (stateCityMap[selectedState]) {
-                stateCityMap[selectedState].forEach((city) => {
-                  const option = document.createElement("option");
-                  option.value = city;
-                  option.textContent = city;
-                  citySelect.appendChild(option);
-                });
-              }
-            };
-          });
       });
 
-      // Copy Address Function
-      function copyAddress() {
-        const isChecked = document.getElementById("sameAddress").checked;
+      if (!isValid) {
+        alert("❌ Please correct the errors before continuing.");
+        return;
+      }
 
-        if (isChecked) {
-          document.querySelector('[name="permanentAddress"]').value =
-            document.querySelector('[name="currentAddress"]').value;
+      // Move to next step
+      steps[currentStep].classList.remove("active");
+      currentStep = index;
+      steps[currentStep].classList.add("active");
 
-          document.getElementById("permanentState").value =
-            document.getElementById("state").value;
+      // Helper to show error
+      function showFieldError(field, message) {
+        const small = field.nextElementSibling;
+        field.style.border = "1px solid red";
+        isValid = false;
 
-          populateCities("permanent"); // Populate permanent city based on state
-
-          document.getElementById("permanentCity").value =
-            document.getElementById("city").value;
-
-          document.querySelector('[name="permanentPincode"]').value =
-            document.querySelector('[name="currentPincode"]').value;
-        } else {
-          document.querySelector('[name="permanentAddress"]').value = "";
-          document.getElementById("permanentState").value = "";
-          document.getElementById("permanentCity").innerHTML =
-            '<option value="">-- Select City --</option>';
-          document.querySelector('[name="permanentPincode"]').value = "";
+        if (small && small.tagName === "SMALL") {
+          small.textContent = message;
+          small.classList.remove("d-none");
         }
       }
-    </script>
-  </body>
+    }
+
+  </script>
+
+
+
+  <script>
+    function showCheck(input) {
+      const checkIcon = input.nextElementSibling;
+      if (input.files && input.files.length > 0) {
+        checkIcon.style.display = "inline-block";
+      } else {
+        checkIcon.style.display = "none";
+      }
+    }
+  </script>
+
+  <script>
+    function calculateExperience(index) {
+      const joiningDate = document.getElementById(
+        `joiningDate-${index}`
+      ).value;
+      const endDate = document.getElementById(`endDate-${index}`).value;
+
+      if (!joiningDate || !endDate) return;
+
+      const start = new Date(joiningDate);
+      const end = new Date(endDate);
+
+      if (end < start) {
+        document.getElementById(`experienceResult-${index}`).value =
+          "Invalid date range";
+        return;
+      }
+
+      let years = end.getFullYear() - start.getFullYear();
+      let months = end.getMonth() - start.getMonth();
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      document.getElementById(
+        `experienceResult-${index}`
+      ).value = `${years} YEAR${years !== 1 ? "S" : ""}, ${months} MONTH${months !== 1 ? "S" : ""
+      }`;
+    }
+  </script>
+  <script>
+    function showCheck(input) {
+      const checkIcon = input.nextElementSibling;
+
+      // Allowed MIME types
+      const allowedTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
+
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
+
+        if (!allowedTypes.includes(file.type)) {
+          alert(
+            " Only PDF and image files (jpg, png, gif, webp) are allowed."
+          );
+          input.value = ""; // Clear the invalid file
+          checkIcon.style.display = "none";
+          return;
+        }
+
+        // If file type is allowed
+        checkIcon.style.display = "inline-block";
+      } else {
+        checkIcon.style.display = "none";
+      }
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("/districts.json")
+        .then((response) => response.json())
+        .then((data) => {
+          const stateCityMap = {};
+          data.districts.forEach((item) => {
+            if (!stateCityMap[item.state]) {
+              stateCityMap[item.state] = [];
+            }
+            stateCityMap[item.state].push(item.district);
+          });
+
+          const currentStateSelect = document.getElementById("state");
+          const currentCitySelect = document.getElementById("city");
+          const permanentStateSelect =
+            document.getElementById("permanentState");
+          const permanentCitySelect =
+            document.getElementById("permanentCity");
+
+          // Populate states for both dropdowns
+          Object.keys(stateCityMap).forEach((state) => {
+            const option1 = document.createElement("option");
+            option1.value = state;
+            option1.textContent = state;
+            currentStateSelect.appendChild(option1);
+
+            const option2 = document.createElement("option");
+            option2.value = state;
+            option2.textContent = state;
+            permanentStateSelect.appendChild(option2);
+          });
+
+          // Populate cities function
+          window.populateCities = function (type) {
+            let stateSelect, citySelect;
+            if (type === "current") {
+              stateSelect = currentStateSelect;
+              citySelect = currentCitySelect;
+            } else {
+              stateSelect = permanentStateSelect;
+              citySelect = permanentCitySelect;
+            }
+
+            const selectedState = stateSelect.value;
+            citySelect.innerHTML =
+              '<option value="">-- Select City --</option>';
+            if (stateCityMap[selectedState]) {
+              stateCityMap[selectedState].forEach((city) => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+              });
+            }
+          };
+        });
+    });
+
+    // Copy Address Function
+    function copyAddress() {
+      const isChecked = document.getElementById("sameAddress").checked;
+
+      if (isChecked) {
+        document.querySelector('[name="permanentAddress"]').value =
+          document.querySelector('[name="currentAddress"]').value;
+
+        document.getElementById("permanentState").value =
+          document.getElementById("state").value;
+
+        populateCities("permanent");
+
+        document.getElementById("permanentCity").value =
+          document.getElementById("city").value;
+
+        document.querySelector('[name="permanentPincode"]').value =
+          document.querySelector('[name="currentPincode"]').value;
+      } else {
+        document.querySelector('[name="permanentAddress"]').value = "";
+        document.getElementById("permanentState").value = "";
+        document.getElementById("permanentCity").innerHTML =
+          '<option value="">-- Select City --</option>';
+        document.querySelector('[name="permanentPincode"]').value = "";
+      }
+    }
+  </script>
+
+
+</body>
+
 </html>

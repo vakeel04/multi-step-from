@@ -20,6 +20,11 @@ const app = express();
 const Server = http.createServer(app);
 const port = 8081;
 
+const cleanExpiredOtps = require("./controllers/otpCleaner");
+
+setInterval(cleanExpiredOtps, 1 * 30 * 1000);
+console.log("🔁 OTP auto-cleaner started...");
+
 //Env config
 env.config();
 
@@ -47,7 +52,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.static("public"));
 
-app.use("/jobForm", router);
+app.use("/", router);
 app.use("/", webRouter);
 app.use("/", dsRouter);
 app.use("/user", userRouter);
