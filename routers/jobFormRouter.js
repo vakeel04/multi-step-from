@@ -5,7 +5,7 @@ const upload = require("../service/img");
 router.post("/send-otp", jobFormController.sendOtpToEmail);
 router.post("/verify-otp", jobFormController.verifyOtpFromJson);
 router.post(
-  "jobForm/:link",
+  "/jobForm/:link",
   upload.fields([
     { name: "panFront" },
     { name: "panBack" },
@@ -20,9 +20,9 @@ router.post(
   jobFormController.createJobForm
 );
 
-router.get("jobForm/", jobFormController.getAllJobForms);
-router.get("jobForm/:id", jobFormController.getJobFormById);
-router.put("jobForm/:id", jobFormController.updateJobForm);
-router.delete("jobForm/:id", jobFormController.deleteJobForm);
+router.get("/jobForm/", jobFormController.getAllJobForms);
+router.get("/jobForm/:id", jobFormController.getJobFormById);
+router.put("/jobForm/:id", jobFormController.updateJobForm);
+router.delete("/jobForm/:id", jobFormController.deleteJobForm);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const multiStepFormController = async (req, res) => {
       return res.render("error-page", {
         status: false,
         message: "This link is not valid!",
-        title: "Invalid Link"
+        title: "Invalid Link",
       });
     }
 
@@ -21,25 +21,23 @@ const multiStepFormController = async (req, res) => {
       return res.render("expired-link", {
         status: false,
         message: "Form already submitted. This link has expired.",
-        title: "Link Expired"
+        title: "Link Expired",
       });
     }
-
+    console.log("body---", req.body);
     // Step 3: Render form
     return res.render("multistep-form", {
       status: true,
       message: "Form page loaded",
       error: {},
       data: { link, job },
-      title: "Job Application Form"
+      title: "Job Application Form",
     });
-
   } catch (error) {
     console.error(error);
     return res.redirect("/error?error=" + error.message);
   }
 };
-
 
 const loginController = async (req, res) => {
   try {

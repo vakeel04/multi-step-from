@@ -9,7 +9,6 @@ const dsController = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search || "";
     const offset = (page - 1) * limit;
-
     // 🔍 Filter
     const whereCondition = search
       ? {

@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 const sendMail = async (to, subject, body) => {
   try {
     const mailOptions = {
-      from: EMAIL_USER,
       to,
       subject,
       html: body,

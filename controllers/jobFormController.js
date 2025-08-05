@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const sendMail = require("../service/mail_sender");
 const fs = require("fs");
 const path = require("path");
+const { log } = require("console");
 
 const otpFilePath = path.join(__dirname, "otpData.json");
 const sendOtpToEmail = async (req, res) => {
@@ -18,6 +19,7 @@ const sendOtpToEmail = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     // Send the email
     await sendMail(
+      "vakeel.khan.ahit@gmail.com",
       email,
       "Email Verification OTP",
       `<p>Your OTP is: <strong>${otp}</strong><br>This OTP is valid for 5 minutes.</p>`
@@ -92,20 +94,15 @@ const verifyOtpFromJson = async (req, res) => {
 // ✅ Create Job Form
 const createJobForm = async (req, res) => {
   try {
+    console.log("body---", req.body);
     const { link } = req.params;
     const { email } = req.body;
-    // ✅ Validate link
+    0;
     const isLinkValid = await Job.findOne({ where: { link } });
     if (!isLinkValid) {
       return res
         .status(404)
         .json({ status: false, message: "Link is not valid." });
-    }
-
-    if (!req.body.email) {
-      return res
-        .status(400)
-        .json({ status: false, message: "Candidate email is missing." });
     }
 
     const files = req.files;

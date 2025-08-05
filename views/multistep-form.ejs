@@ -139,7 +139,7 @@
           <div class="col-md-12 col-12">
             <div class="form-group">
               <label>Full Name:</label>
-              <input type="text" name="fullName" value="<%=data?.job?.candidateName%>" required disabled />
+              <input type="text" name="fullName" value="<%=data?.job?.candidateName%>" required readonly />
             </div>
           </div>
 
@@ -211,8 +211,8 @@
             <div class="form-group">
               <label>OTP:</label>
               <div style="position: relative;">
-                <input placeholder="Enter OTP..." type="text" name="otp" id="otp" required pattern="\d{4,6}"
-                  class="form-control" />
+                <input placeholder="Check Your WhatsApp For OTP..." type="text" name="otp" id="otp" required
+                  pattern="\d{4,6}" class="form-control" />
                 <button type="button" class="sendOtpButton btn btn-success" onclick="verifyOtp(this)">
                   <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
                   <span class="btn-text">Verify OTP</span>
@@ -473,13 +473,13 @@
           <h4>Experience</h4>
 
           <div id="form"></div>
-
+          <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">
+            + Add Experience
+          </button>
 
         </div>
 
-        <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">
-          + Add Experience
-        </button>
+
         <div class="mt-4">
           <button type="button" onclick="prevStep(1)" class="back-step-button">
             Back
@@ -506,61 +506,68 @@
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Job Profile:</label>
-              <input type="text" name="jobProfile" class="form-control" value="<%= data?.job?.jobRole %>" readonly />
+              <input type="text" name="jobProfile" class="form-control lockable" value="<%= data?.job?.jobRole %>"
+                readonly />
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Salary Offered:</label>
-              <input type="text" name="salary" class="form-control" value="<%= data?.job?.OfferedSalary %>" readonly />
+              <input type="text" name="salary" class="form-control lockable" value="<%= data?.job?.OfferedSalary %>"
+                readonly />
             </div>
           </div>
 
           <div class="col-md-12 col-12">
             <div class="form-group">
               <label>Referred by (HR Name):</label>
-              <input type="text" name="referredBy" class="form-control" value="<%= data?.job?.hrName %>" readonly />
+              <input type="text" name="referredBy" class="form-control lockable" value="<%= data?.job?.hrName %>"
+                readonly />
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Interview Date:</label>
-              <input type="text" name="interviewDate" class="form-control" value="<%= data?.job?.date %>" readonly />
+              <input type="text" name="interviewDate" class="form-control lockable" value="<%= data?.job?.date %>"
+                readonly />
             </div>
           </div>
 
           <div class="col-md-6 col-12">
             <div class="form-group">
               <label>Interview Type:</label>
-              <input type="text" name="interviewType" class="form-control" value="<%= data?.job?.interviewType %>"
-                readonly />
+              <input type="text" name="interviewType" class="form-control lockable"
+                value="<%= data?.job?.interviewType %>" readonly />
             </div>
           </div>
         </div>
 
         <div class="my-3">
-          <button type="button" class="next-step-button bg-success">
-            This details is corerct?
+          <button type="button" id="correctBtn" class="next-step-button bg-success text-white">
+            This details is correct?
           </button>
 
-          <button type="button" class="next-step-button bg-danger">
+          <button type="button" id="notCorrectBtn" class="next-step-button bg-danger text-white">
             This details is not correct?
           </button>
+
+          <div id="feedbackMessage" class="mt-3 text-info fw-bold"></div>
         </div>
 
         <small>
-          <input type="checkbox" id="agree" style="width: 10px" /> I agree to
-          the <a href="#" target="_blank">Privacy Policy</a> and
-          <a href="#" target="_blank">Terms & Conditions</a>.
+          <input type="checkbox" id="agree" style="width: 10px" required />
+          I agree to the
+          <a href="/privacy-policy" target="_blank">Privacy Policy</a> and
+          <a href="/terms-conditions" target="_blank">Terms & Conditions</a>.
         </small>
 
         <div class="mt-4">
           <button type="button" onclick="prevStep(2)" class="back-step-button">
             Back
           </button>
-          <button type="button" onclick="submitForm()" class="next-step-button">
+          <button type="submit" onclick="submitForm()" class="next-step-button">
             Submit
           </button>
         </div>
@@ -951,6 +958,19 @@
 
       const form = document.getElementById("multiStepForm");
       const formData = new FormData(form);
+      // Append disabled select values manually
+      document.querySelectorAll("select[data-value]").forEach((el) => {
+        const name = el.name;
+        const value = el.getAttribute("data-value");
+        if (name && value) {
+          formData.append(name, value);
+        }
+      });
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+      console.log("formdata---", formData);
+
 
       try {
         const response = await fetch(`/jobForm/${link}`, {
@@ -963,9 +983,6 @@
 
         if (result.status) {
           showSuccess();
-
-          // ✅ Reset Form after success
-          form.reset();
           steps.forEach((step) => step.classList.remove("active"));
           currentStep = 0;
           steps[currentStep].classList.add("active");
@@ -977,11 +994,12 @@
           closePopup();
         }
       } catch (error) {
-        console.error("Submission error:", error);
+        console.error("Submission error:", error.message);
         alert("An error occurred. Please try again.");
         closePopup();
       }
     }
+
 
     // ✅ Multi-step validation
     // ✅ Multi-step validation
@@ -989,10 +1007,11 @@
       const currentForm = steps[currentStep];
       const requiredFields = currentForm.querySelectorAll(
         "input[required], select[required], textarea[required]"
+
       );
 
       const mobileRegex = /^[6-9]\d{9}$/;
-      const gmailRegex = /^[a-z0-9._%+-]+@gmail\.com$/i;
+      const gmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       let isValid = true;
 
       requiredFields.forEach((field) => {
@@ -1040,6 +1059,7 @@
         }
       }
     }
+
 
   </script>
 
@@ -1209,6 +1229,45 @@
     }
   </script>
 
+
+  <script>
+    const correctBtn = document.getElementById("correctBtn");
+    const notCorrectBtn = document.getElementById("notCorrectBtn");
+    const feedbackMessage = document.getElementById("feedbackMessage");
+
+    correctBtn.addEventListener("click", function () {
+      notCorrectBtn.style.display = "inline-block";
+      feedbackMessage.textContent = "✅ Your details are marked as correct.";
+      feedbackMessage.classList.remove("text-danger");
+      feedbackMessage.classList.add("text-success");
+
+      const step4 = document.getElementById("step4");
+
+      // Make inputs and textareas readonly
+      step4.querySelectorAll("input, textarea").forEach((el) => {
+        if (el.id !== "agree") {
+          el.setAttribute("readonly", true);
+        }
+      });
+
+      // For selects — disable but save their value
+      step4.querySelectorAll("select").forEach((el) => {
+        el.setAttribute("data-value", el.value); // backup
+        el.setAttribute("disabled", true);       // disable
+      });
+    });
+    notCorrectBtn.addEventListener("click", function () {
+      correctBtn.style.display = "none";
+      feedbackMessage.textContent = "✏️ You can now edit the details.";
+      feedbackMessage.classList.remove("text-success");
+      feedbackMessage.classList.add("text-danger");
+
+      // Make all inputs editable except the agree checkbox (which stays editable anyway)
+      document.querySelectorAll("input, textarea, select").forEach((el) => {
+        el.removeAttribute("readonly");
+      });
+    });
+  </script>
 
 </body>
 
