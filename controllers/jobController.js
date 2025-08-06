@@ -18,10 +18,18 @@ const createJob = async (req, res) => {
       link: rawLink,
       logo: companyLogo,
     };
-    req.session.job = {
-      companyName: companyName,
-      jobRole: req.body.jobRole,
-    };
+    // ✅ Store job data in cookie (signed)
+    res.cookie(
+      "job",
+      { companyName: companyName, jobRole: req.body.jobRole },
+      {
+        httpOnly: true, // prevents JavaScript access
+        secure: false, // true only in production HTTPS
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        signed: true, // signed cookie for security
+      }
+    );
     const newJob = await Job.create(payload);
     return res.status(201).json({
       status: true,

@@ -118,9 +118,11 @@
       background-color: #f8d7da;
     }
   </style>
+
 </head>
 
 <body>
+
   <div style="
         background-image: url('https://img.freepik.com/free-vector/ombre-blue-curve-light-blue-background_53876-173299.jpg?semt=ais_hybrid&w=740');
         background-size: cover;
@@ -186,7 +188,6 @@
                   <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
                   <span class="btn-text">Verify OTP</span>
                 </button>
-                <span id="otpStatus" class="text-success ms-2 fw-bold d-none">✅ Verified</span>
               </div>
               <small id="otpError" class="text-danger d-none">Invalid OTP</small>
             </div>
@@ -217,11 +218,22 @@
                   <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
                   <span class="btn-text">Verify OTP</span>
                 </button>
-                <span id="otpStatus" class="text-success ms-2 fw-bold d-none">✅ Verified</span>
+
               </div>
               <small id="otpError" class="text-danger d-none">Invalid OTP</small>
             </div>
           </div>
+
+
+          <!-- <div>
+            <input id="mobile-input" placeholder="Enter mobile number" />
+            <button onclick="phoneAuth()">Request OTP</button>
+          </div>
+
+          <div id="otp-section" style="display: none; margin-top: 10px;">
+            <input id="otp-input" placeholder="Enter OTP" />
+            <button onclick="verifyOTP()">Verify OTP</button>
+          </div> -->
 
           <!-- Alternate Mobile Number -->
           <div class="col-md-6 col-12">
@@ -622,16 +634,179 @@
       </button>
     </div>
   </div>
+
+  <!-- mobile otp  -->
+  <!-- <script>
+    const clientId = "V7MNHJ4SHOOSX1CQI6FA86ULEJN1ADEB";
+    const clientSecret = "yb9kkh0pjrudt97jhmnc9ll47lvj7bap";
+    const sendOtpUrl = "https://auth.otpless.app/send";
+    const verifyOtpUrl = "https://auth.otpless.app/verify";
+
+    document.getElementById("sendOtpBtn2").addEventListener("click", async function () {
+      const number = document.querySelector("input[name='number']").value;
+      if (!number.match(/^[6-9][0-9]{9}$/)) {
+        alert("Please enter a valid 10-digit mobile number");
+        return;
+      }
+      console.log("number---", number);
+
+      this.disabled = true;
+      this.querySelector(".spinner-border").classList.remove("d-none");
+      this.querySelector(".btn-text").textContent = "Sending...";
+
+      try {
+        const response = await fetch(sendOtpUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "clientId": clientId,
+            "clientSecret": clientSecret
+          },
+          body: JSON.stringify({
+            channel: "whatsapp", // WhatsApp OTP
+            phone: `91${number}`,
+            otp_length: 6
+          })
+        });
+
+        const data = await response.json();
+        console.log("OTP Send Response:", data);
+
+        if (data.status === "success") {
+          alert("OTP sent successfully on WhatsApp");
+        } else {
+          alert("Failed to send OTP: " + data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error sending OTP");
+      } finally {
+        this.disabled = false;
+        this.querySelector(".spinner-border").classList.add("d-none");
+        this.querySelector(".btn-text").textContent = "Send OTP";
+      }
+    });
+
+    async function verifyOtp(button) {
+      const otp = document.querySelector("input[name='otp']").value;
+      const number = document.querySelector("input[name='number']").value;
+
+      if (!otp.match(/^\d{4,6}$/)) {
+        alert("Please enter a valid OTP");
+        return;
+      }
+
+      button.disabled = true;
+      button.querySelector(".spinner-border").classList.remove("d-none");
+      button.querySelector(".btn-text").textContent = "Verifying...";
+
+      try {
+        const response = await fetch(verifyOtpUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "clientId": clientId,
+            "clientSecret": clientSecret
+          },
+          body: JSON.stringify({
+            phone: `91${number}`,
+            otp: otp
+          })
+        });
+
+        const data = await response.json();
+        console.log("Verify OTP Response:", data);
+
+        if (data.status === "success") {
+          document.getElementById("otpError").classList.add("d-none");
+        } else {
+          document.getElementById("otpError").classList.remove("d-none");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error verifying OTP");
+      } finally {
+        button.disabled = false;
+        button.querySelector(".spinner-border").classList.add("d-none");
+        button.querySelector(".btn-text").textContent = "Verify OTP";
+      }
+    }
+  </script> -->
+
+  <!-- Include Headless SDK
+  <script id="otpless-sdk" src="https://otpless.com/v4/headless.js" data-appid="2VYHYHQ0C4UF8NEPSHUN"></script>
+
+  <script>
+    let OTPlessSignin;
+
+    const callback = (eventCallback) => {
+      console.log("Event:", eventCallback);
+
+      if (eventCallback.responseType === "ONETAP") {
+        const token = eventCallback.response.token;
+        console.log("✅ Verified! Token:", token);
+        alert("Verified Successfully!");
+      }
+
+      if (eventCallback.responseType === "OTP_AUTO_READ") {
+        const otp = eventCallback.response.otp;
+        document.getElementById("otp-input").value = otp;
+      }
+
+      if (eventCallback.responseType === "FAILED") {
+        console.error("❌ Failed:", eventCallback.response);
+        alert("Verification Failed!");
+      }
+    };
+
+    // ✅ Initialize SDK
+    document.addEventListener("DOMContentLoaded", () => {
+      OTPlessSignin = new OTPless(callback);
+    });
+
+    // ✅ Send OTP
+    function phoneAuth() {
+      const phone = document.getElementById("mobile-input").value;
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        alert("Enter a valid 10-digit mobile number");
+        return;
+      }
+
+      console.log("Sending OTP to:", phone);
+
+      OTPlessSignin.initiate({
+        channel: "whatsapp", // or "sms"
+        phone: phone,
+        countryCode: "+91"
+      });
+
+      document.getElementById("otp-section").style.display = "block";
+    }
+
+    // ✅ Verify OTP
+    function verifyOTP() {
+      const otp = document.getElementById("otp-input").value;
+      if (!/^\d{4,6}$/.test(otp)) {
+        alert("Enter a valid OTP");
+        return;
+      }
+
+      OTPlessSignin.verify({
+        otp: otp
+      });
+    }
+  </script>
+
+ -->
+
+
+  <!-- email otp  -->
   <script>
     let otpCooldownTimer = null;
 
     // Attach event listeners
     document.getElementById("sendOtpBtn").addEventListener("click", function () {
       sendOtp(this);
-    });
-
-    document.getElementById("otp").addEventListener("input", () => {
-      document.getElementById("otpStatus").classList.add("d-none");
     });
 
     async function sendOtp(button) {
@@ -665,8 +840,7 @@
         const data = await res.json();
         // alert(data.message);
 
-
-        startOtpCooldown(button, 300);
+        startOtpCooldown(button, 120);
       } catch (err) {
         alert("Error sending OTP");
         button.disabled = false;
@@ -706,7 +880,6 @@
       const email = document.getElementById("email").value.trim();
       const otp = document.getElementById("otp").value.trim();
       const otpError = document.getElementById("otpError");
-      const otpStatus = document.getElementById("otpStatus");
 
       if (!otp || !/^\d{4,6}$/.test(otp)) {
         otpError.classList.remove("d-none");
@@ -735,10 +908,22 @@
         // alert(data.message);
 
         if (data.status) {
-          otpStatus.classList.remove("d-none");
           btnText.textContent = "Verified ✅";
+
+          // ✅ Mark as verified
+          button.classList.add("otp-verified");
+
+          // ✅ Stop OTP timer
+          if (otpCooldownTimer) {
+            clearInterval(otpCooldownTimer);
+            otpCooldownTimer = null;
+          }
+
+          // ✅ Disable Send OTP button
+          const sendOtpBtn = document.getElementById("sendOtpBtn");
+          sendOtpBtn.disabled = true;
+          sendOtpBtn.querySelector(".btn-text").textContent = "OTP Verified";
         } else {
-          otpStatus.classList.add("d-none");
           btnText.textContent = "Verify OTP";
           button.disabled = false;
         }
@@ -753,13 +938,11 @@
   </script>
 
 
-
-
-
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
     crossorigin="anonymous"></script>
+
+  <!-- copy address & add exprince row & -->
   <script>
     let currentStep = 0;
     const steps = document.querySelectorAll(".step");
@@ -918,6 +1101,7 @@
     });
   </script>
 
+  <!-- jobForm api  && show pop -->
   <script>
     const pathParts = window.location.pathname.split("/");
     const link = pathParts[pathParts.length - 1];
@@ -925,11 +1109,10 @@
     // ✅ Show Popup with Loading Spinner
     function showPopup() {
       document.getElementById("popupAccept").style.display = "block";
-      document.getElementById("popupMessage").innerText =
-        "Submitting your form... Please wait.";
       document.getElementById("loadingSpinner").style.display = "block";
       document.getElementById("successIcon").style.display = "none";
       document.getElementById("popupCloseBtn").style.display = "none";
+      document.getElementById("popupMessage").innerText = "Submitting your form... Please wait.";
     }
 
     // ✅ Show Success Message
@@ -958,6 +1141,7 @@
 
       const form = document.getElementById("multiStepForm");
       const formData = new FormData(form);
+
       // Append disabled select values manually
       document.querySelectorAll("select[data-value]").forEach((el) => {
         const name = el.name;
@@ -966,29 +1150,27 @@
           formData.append(name, value);
         }
       });
+
       for (let pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      console.log("formdata---", formData);
-
 
       try {
         const response = await fetch(`/jobForm/${link}`, {
           method: "POST",
           body: formData,
+          credentials: "include"
         });
 
         const result = await response.json();
         console.log("Server Response:", result);
 
         if (result.status) {
-          showSuccess();
-          steps.forEach((step) => step.classList.remove("active"));
-          currentStep = 0;
-          steps[currentStep].classList.add("active");
-
-          // ✅ Auto close popup after 3 seconds
-          setTimeout(() => closePopup(), 3000);
+          // ✅ Show success message
+          document.getElementById("loadingSpinner").style.display = "none"; // Hide spinner
+          document.getElementById("successIcon").style.display = "block";  // Show success icon
+          document.getElementById("popupMessage").innerText = "Form submitted successfully!";
+          document.getElementById("popupCloseBtn").style.display = "block"; // Show OK button
         } else {
           alert(result.message || "Something went wrong. Try again.");
           closePopup();
@@ -999,66 +1181,68 @@
         closePopup();
       }
     }
-
-
-    // ✅ Multi-step validation
-    // ✅ Multi-step validation
-    function nextStep(index) {
-      const currentForm = steps[currentStep];
-      const requiredFields = currentForm.querySelectorAll(
-        "input[required], select[required], textarea[required]"
-
-      );
-
-      const mobileRegex = /^[6-9]\d{9}$/;
-      const gmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      let isValid = true;
-
-      requiredFields.forEach((field) => {
-        const value = field.value.trim();
-        const name = field.name;
-        const errorElement = field.nextElementSibling;
-
-        // Remove existing error if any
-        field.style.border = "";
-        if (errorElement?.tagName === "SMALL") {
-          errorElement.classList.add("d-none");
-        }
-
-        if (!value) {
-          showFieldError(field, "This field is required.");
-        } else if (
-          ["number", "AlternateNumber", "fatherNumber", "motherNumber"].includes(name) &&
-          !mobileRegex.test(value)
-        ) {
-          showFieldError(field, "Please enter a valid 10-digit mobile number.");
-        } else if (name === "email" && !gmailRegex.test(value)) {
-          showFieldError(field, "Please enter a valid Gmail address (e.g., user@gmail.com)");
-        }
-      });
-
-      if (!isValid) {
-        alert("❌ Please correct the errors before continuing.");
-        return;
-      }
-
-      // Move to next step
-      steps[currentStep].classList.remove("active");
-      currentStep = index;
-      steps[currentStep].classList.add("active");
-
-      // Helper to show error
-      function showFieldError(field, message) {
-        const small = field.nextElementSibling;
-        field.style.border = "1px solid red";
-        isValid = false;
-
-        if (small && small.tagName === "SMALL") {
-          small.textContent = message;
-          small.classList.remove("d-none");
-        }
-      }
+    // ✅ Add this function for OK button click
+    function closePopup() {
+      document.getElementById("popupAccept").style.display = "none";
+      window.location.reload(); // ✅ Reload page on OK click
     }
+    // ✅ Multi-step validation
+    // function nextStep(index) {
+    //   const currentForm = steps[currentStep];
+    //   const requiredFields = currentForm.querySelectorAll(
+    //     "input[required], select[required], textarea[required]"
+
+    //   );
+
+    //   const mobileRegex = /^[6-9]\d{9}$/;
+    //   const gmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //   let isValid = true;
+
+    //   requiredFields.forEach((field) => {
+    //     const value = field.value.trim();
+    //     const name = field.name;
+    //     const errorElement = field.nextElementSibling;
+
+    //     // Remove existing error if any
+    //     field.style.border = "";
+    //     if (errorElement?.tagName === "SMALL") {
+    //       errorElement.classList.add("d-none");
+    //     }
+
+    //     if (!value) {
+    //       showFieldError(field, "This field is required.");
+    //     } else if (
+    //       ["number", "AlternateNumber", "fatherNumber", "motherNumber"].includes(name) &&
+    //       !mobileRegex.test(value)
+    //     ) {
+    //       showFieldError(field, "Please enter a valid 10-digit mobile number.");
+    //     } else if (name === "email" && !gmailRegex.test(value)) {
+    //       showFieldError(field, "Please enter a valid Gmail address (e.g., user@gmail.com)");
+    //     }
+    //   });
+
+    //   if (!isValid) {
+    //     alert("❌ Please correct the errors before continuing.");
+    //     return;
+    //   }
+
+    //   // Move to next step
+    //   steps[currentStep].classList.remove("active");
+    //   currentStep = index;
+    //   steps[currentStep].classList.add("active");
+
+    //   // Helper to show error
+    //   function showFieldError(field, message) {
+    //     const small = field.nextElementSibling;
+    //     field.style.border = "1px solid red";
+    //     isValid = false;
+
+    //     if (small && small.tagName === "SMALL") {
+    //       small.textContent = message;
+    //       small.classList.remove("d-none");
+    //     }
+    //   }
+    // }
 
 
   </script>
@@ -1076,6 +1260,7 @@
     }
   </script>
 
+  <!-- calculate Experience -->
   <script>
     function calculateExperience(index) {
       const joiningDate = document.getElementById(
@@ -1108,6 +1293,8 @@
       }`;
     }
   </script>
+
+  <!-- file upload validation -->
   <script>
     function showCheck(input) {
       const checkIcon = input.nextElementSibling;
@@ -1142,6 +1329,7 @@
     }
   </script>
 
+  <!-- state and city daynamic -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       fetch("/districts.json")
@@ -1230,6 +1418,7 @@
   </script>
 
 
+  <!-- 4 step main corect and wrong btn -->
   <script>
     const correctBtn = document.getElementById("correctBtn");
     const notCorrectBtn = document.getElementById("notCorrectBtn");
@@ -1268,6 +1457,129 @@
       });
     });
   </script>
+
+
+  <!--from input validation  -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const requiredFields = document.querySelectorAll("input[required], select[required], textarea[required]");
+      const mobileRegex = /^[6-9]\d{9}$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      // Real-time validation
+      requiredFields.forEach(field => {
+        if (field.type === "file" || field.tagName === "SELECT") {
+          field.addEventListener("change", function () {
+            showCheck(field);
+          });
+        } else {
+          field.addEventListener("input", function () {
+            validateField(field);
+          });
+        }
+      });
+
+      // ✅ Validate text/email/number fields
+      function validateField(field) {
+        const value = field.value.trim();
+        let message = "";
+
+        if (!value) {
+          message = "This field is required.";
+        } else if (
+          ["number", "AlternateNumber", "fatherNumber", "motherNumber"].includes(field.name) &&
+          !mobileRegex.test(value)
+        ) {
+          message = "Please enter a valid 10-digit mobile number.";
+        } else if (field.name === "email" && !emailRegex.test(value)) {
+          message = "Please enter a valid Gmail address (e.g., user@gmail.com)";
+        }
+
+        showError(field, message);
+      }
+
+      // ✅ Show green tick for file or select
+      function showCheck(element) {
+        const parent = element.closest(".d-flex");
+        const tick = parent.querySelector(".check-icon");
+
+        if ((element.type === "file" && element.files.length > 0) || (element.tagName === "SELECT" && element.value !== "")) {
+          tick.style.display = "inline";
+        } else {
+          tick.style.display = "none";
+        }
+      }
+
+      // ✅ Show error messages
+      function showError(field, message) {
+        let errorElement = field.nextElementSibling;
+
+        if (!errorElement || errorElement.tagName !== "SMALL") {
+          errorElement = document.createElement("small");
+          errorElement.style.color = "red";
+          field.insertAdjacentElement("afterend", errorElement);
+        }
+
+        if (message) {
+          errorElement.textContent = message;
+          errorElement.classList.remove("d-none");
+          field.style.border = "1px solid red";
+        } else {
+          errorElement.textContent = "";
+          errorElement.classList.add("d-none");
+          field.style.border = "";
+        }
+      }
+
+      // ✅ Modify nextStep() for full validation
+      window.nextStep = function (index) {
+        const currentForm = steps[currentStep];
+        const fields = currentForm.querySelectorAll("input[required], select[required], textarea[required]");
+        let isValid = true;
+
+        fields.forEach(field => {
+          if (field.type === "file" || field.tagName === "SELECT") {
+            showCheck(field);
+            // ✅ If file is required and not uploaded, mark invalid
+            if (field.type === "file" && field.files.length === 0) {
+              isValid = false;
+            }
+            // ✅ If dropdown is required and not selected, mark invalid
+            if (field.tagName === "SELECT" && field.value === "") {
+              isValid = false;
+            }
+          } else {
+            validateField(field);
+            if (field.nextElementSibling && field.nextElementSibling.textContent !== "") {
+              isValid = false;
+            }
+          }
+        });
+
+        // ✅ OTP check (if applicable)
+        const otpVerified = document.querySelector(".sendOtpButton.otp-verified");
+        if (currentForm.querySelector("#email") && currentForm.querySelector("#otp")) {
+          if (!otpVerified) {
+            alert("❌ Please verify your Email OTP before continuing.");
+            return;
+          }
+        }
+
+        if (!isValid) {
+          alert("❌ Please correct the errors before continuing.");
+          return;
+        }
+
+        steps[currentStep].classList.remove("active");
+        currentStep = index;
+        steps[currentStep].classList.add("active");
+      };
+
+    });
+
+  </script>
+
+
 
 </body>
 

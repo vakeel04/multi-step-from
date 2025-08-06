@@ -96,8 +96,8 @@
         const result = await response.json();
 
         if (result.status) {
-          alert("✅ Login successful!");
-          window.location.href = "/dashboard";
+          alert("login success")
+          window.location.assign("/dashboard");
         } else {
           alert(result.message);
         }
@@ -107,6 +107,7 @@
       }
     });
   </script>
+
 </body>
 
 </html>

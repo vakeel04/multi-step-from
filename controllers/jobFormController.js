@@ -19,7 +19,6 @@ const sendOtpToEmail = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     // Send the email
     await sendMail(
-      "vakeel.khan.ahit@gmail.com",
       email,
       "Email Verification OTP",
       `<p>Your OTP is: <strong>${otp}</strong><br>This OTP is valid for 5 minutes.</p>`
@@ -97,7 +96,6 @@ const createJobForm = async (req, res) => {
     console.log("body---", req.body);
     const { link } = req.params;
     const { email } = req.body;
-    0;
     const isLinkValid = await Job.findOne({ where: { link } });
     if (!isLinkValid) {
       return res
@@ -154,13 +152,12 @@ const createJobForm = async (req, res) => {
     };
 
     const newForm = await JobForm.create(formData);
-
     // ✅ Send email to candidate
     const candidateName = req.body.fullName;
-    const position = req.session.job?.jobRole || "N/A";
+    const position = req.signedCookies.job.jobRole || "N/A";
     const submissionDate = new Date().toLocaleDateString("en-IN");
-    const hrName = req.session.user?.name || "HR";
-    const companyName = req.session.job?.companyName || "Company";
+    const hrName = req.signedCookies.user.name || "HR";
+    const companyName = req.signedCookies.job.companyName || "Company";
 
     await sendMail(
       email,
@@ -179,7 +176,8 @@ const createJobForm = async (req, res) => {
     );
 
     // ✅ Send email to HR
-    const hrEmail = req.session.user?.email;
+    const hrEmail = req.signedCookies.user.email;
+    console.log("hrEmail--", hrEmail);
     if (hrEmail) {
       const location = req.body.currentCity || "N/A";
       const contactInfo = `${req.body.email} / ${req.body.number}`;

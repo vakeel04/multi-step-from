@@ -56,16 +56,21 @@ const loginUser = async (req, res) => {
         .status(401)
         .json({ status: false, message: "Invalid password." });
     }
-    // Set session data
-    req.session.user = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    };
+    // ✅ Store user data in cookie (signed)
+    res.cookie(
+      "user",
+      { id: user.id, name: user.name, email: user.email },
+      {
+        httpOnly: true, // prevents JavaScript access
+        secure: false, // true only in production HTTPS
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        signed: true, // signed cookie for security
+      }
+    );
     return res.status(200).json({
       status: true,
       message: "Login successful.",
-      user: req.session.user,
     });
   } catch (error) {
     console.error("loginUser error:", error);

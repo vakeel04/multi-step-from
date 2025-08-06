@@ -28,7 +28,8 @@ const dsController = async (req, res) => {
     });
 
     const totalPages = Math.ceil(totalDocs / limit);
-    const user = req.session.user;
+    const user = req.signedCookies.user;
+
     if (!user) return res.redirect("/login");
     res.render("add-job", {
       data: {
