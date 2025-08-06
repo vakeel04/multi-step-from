@@ -112,12 +112,12 @@ const createJobForm = async (req, res) => {
     if (expInput) {
       if (
         Array.isArray(expInput.companyName) &&
-        Array.isArray(expInput.jobRole)
+        Array.isArray(expInput.jobProfile)
       ) {
         for (let i = 0; i < expInput.companyName.length; i++) {
           experienceArray.push({
             companyName: expInput.companyName[i],
-            jobRole: expInput.jobRole[i],
+            jobProfile: expInput.jobProfile[i],
             location: expInput.location[i],
             joiningDate: expInput.joiningDate[i],
             endDate: expInput.endDate[i],
@@ -127,7 +127,7 @@ const createJobForm = async (req, res) => {
       } else {
         experienceArray.push({
           companyName: expInput.companyName,
-          jobRole: expInput.jobRole,
+          jobProfile: expInput.jobProfile,
           location: expInput.location,
           joiningDate: expInput.joiningDate,
           endDate: expInput.endDate,
@@ -150,11 +150,11 @@ const createJobForm = async (req, res) => {
       resume: getFilePath("resume"),
       link,
     };
-
+    console.log("form----", formData);
     const newForm = await JobForm.create(formData);
     // ✅ Send email to candidate
     const candidateName = req.body.fullName;
-    const position = req.signedCookies.job.jobRole || "N/A";
+    const position = req.body.jobProfile || "N/A";
     const submissionDate = new Date().toLocaleDateString("en-IN");
     const hrName = req.signedCookies.user.name || "HR";
     const companyName = req.signedCookies.job.companyName || "Company";

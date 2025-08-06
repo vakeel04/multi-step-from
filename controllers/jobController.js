@@ -6,13 +6,9 @@ const createJob = async (req, res) => {
   try {
     const rawLink = uuidv4().replace(/-/g, "");
 
-    const companyName = req.body.companyName;
+    const { companyName, jobRole } = req.body;
 
     const companyLogo = companyName + ".png";
-
-    console.log("companyLogo : ", companyLogo);
-
-    console.log(req.body);
     const payload = {
       ...req.body,
       link: rawLink,
@@ -21,7 +17,7 @@ const createJob = async (req, res) => {
     // ✅ Store job data in cookie (signed)
     res.cookie(
       "job",
-      { companyName: companyName, jobRole: req.body.jobRole },
+      { companyName: companyName },
       {
         httpOnly: true, // prevents JavaScript access
         secure: false, // true only in production HTTPS
