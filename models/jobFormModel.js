@@ -1,14 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
 
-// Custom mobile validator
-const mobileValidator = {
-  is: {
-    args: /^[6-9][0-9]{9}$/,
-    msg: "Invalid 10-digit mobile number",
-  },
-};
-
 const JobForm = sequelize.define(
   "JobForm",
   {
@@ -27,22 +19,18 @@ const JobForm = sequelize.define(
     number: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: mobileValidator,
     },
     AlternateNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: mobileValidator,
     },
     fatherNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: mobileValidator,
     },
     motherNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: mobileValidator,
     },
 
     currentAddress: DataTypes.STRING,

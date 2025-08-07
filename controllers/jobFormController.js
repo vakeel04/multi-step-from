@@ -93,7 +93,6 @@ const verifyOtpFromJson = async (req, res) => {
 // ✅ Create Job Form
 const createJobForm = async (req, res) => {
   try {
-    console.log("body---", req.body);
     const { link } = req.params;
     const { email } = req.body;
     const isLinkValid = await Job.findOne({ where: { link } });
@@ -150,7 +149,7 @@ const createJobForm = async (req, res) => {
       resume: getFilePath("resume"),
       link,
     };
-    console.log("form----", formData);
+
     const newForm = await JobForm.create(formData);
     // ✅ Send email to candidate
     const candidateName = req.body.fullName;
@@ -202,7 +201,7 @@ const createJobForm = async (req, res) => {
       data: newForm,
     });
   } catch (error) {
-    console.error("createJobForm error:", error);
+    console.error("createJobForm error:", error.message);
     return res.status(500).json({ status: false, message: error.message });
   }
 };
