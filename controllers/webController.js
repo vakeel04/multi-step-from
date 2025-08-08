@@ -24,7 +24,6 @@ const multiStepFormController = async (req, res) => {
         title: "Link Expired",
       });
     }
-    console.log("body---", req.body);
     // Step 3: Render form
     return res.render("multistep-form", {
       status: true,

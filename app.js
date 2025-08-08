@@ -25,12 +25,7 @@ const cleanExpiredOtps = require("./controllers/otpCleaner");
 setInterval(cleanExpiredOtps, 1 * 30 * 1000);
 console.log("🔁 OTP auto-cleaner started...");
 
-// app.use(
-//   cors({
-//     origin: "localhost:8081",
-//     credentials: true,
-//   })
-// );
+app.use(cors());
 
 //Env config
 env.config();

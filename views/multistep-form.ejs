@@ -565,7 +565,7 @@
           <button type="button" onclick="prevStep(2)" class="back-step-button">
             Back
           </button>
-          <button type="submit" onclick="submitForm()" class="next-step-button">
+          <button type="submit" onclick="submitForm(event)" class="next-step-button">
             Submit
           </button>
         </div>
@@ -697,6 +697,7 @@
           phone: phone,
           countryCode: "+91",
         });
+
 
         // ✅ Spinner hide after 1 sec
         setTimeout(() => {
@@ -1086,10 +1087,11 @@
 
     function closePopup() {
       document.getElementById("popupAccept").style.display = "none";
-      // window.location.reload(); // optional
+      window.location.reload(); // optional
     }
 
-    async function submitForm() {
+    async function submitForm(event) {
+      event.preventDefault();
       const agree = document.getElementById("agree");
       if (!agree.checked) {
         alert("Please agree to the Privacy Policy and Terms & Conditions.");
@@ -1101,24 +1103,15 @@
       const form = document.getElementById("multiStepForm");
       const formData = new FormData(form);
 
-      // Include values of disabled selects
-      document.querySelectorAll("select[data-value]").forEach((el) => {
-        const name = el.name;
-        const value = el.getAttribute("data-value");
-        if (name && value) {
-          formData.append(name, value);
-        }
-      });
-
-
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
       }
+
       try {
         const response = await fetch(`/jobForm/${link}`, {
           method: "POST",
           body: formData,
-          credentials: true
+
         });
         console.log("formData--->", formData);
         const result = await response.json();
@@ -1330,14 +1323,14 @@
       // Make inputs and textareas readonly
       step4.querySelectorAll("input, textarea").forEach((el) => {
         if (el.id !== "agree") {
-          el.setAttribute("readonly", true);
+          el.readOnly = true
         }
       });
 
       // For selects — disable but save their value
       step4.querySelectorAll("select").forEach((el) => {
-        el.setAttribute("data-value", el.value); // backup
-        el.setAttribute("disabled", true); // disable
+        el.setAttribute("data-value", el.value); // backup for FormData
+        el.disabled = true; // properly disable
       });
     });
     notCorrectBtn.addEventListener("click", function () {
@@ -1346,22 +1339,22 @@
       feedbackMessage.classList.remove("text-success");
       feedbackMessage.classList.add("text-danger");
 
-      // Make all inputs editable except the agree checkbox (which stays editable anyway)
-      document.querySelectorAll("input, textarea, select").forEach((el) => {
-        el.removeAttribute("readonly");
+      document.querySelectorAll("input, textarea").forEach((el) => {
+        el.readOnly = false;
       });
+
+      document.querySelectorAll("select").forEach((el) => {
+        el.disabled = false;
+      })
     });
+
   </script>
 
 
 
 
-  <!--from input validation  -->
-
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      console.log("loadd----");
-
       const requiredFields = document.querySelectorAll(
         "input[required], select[required], textarea[required]"
       );
@@ -1382,9 +1375,9 @@
         }
       });
 
-      // ✅ Validate text/email/number fields
+      // ✅ Validate text/email/number fields with debug logs
       function validateField(field) {
-        console.log("validated--");
+        console.log(`🔍 Validating field: name="${field.name}", value="${field.value}"`);
         let value = field.value.trim();
         let message = "";
 
@@ -1392,24 +1385,28 @@
         if (
           ["number", "AlternateNumber", "fatherNumber", "motherNumber", "mobile"].includes(field.name)
         ) {
-          value = value.replace(/\D/g, "").slice(-10); // keep only last 10 digits
-          field.value = value; // update in input field
+          value = value.replace(/\D/g, "").slice(-10);
+          field.value = value;
         }
 
         if (!value) {
           message = "This field is required.";
+          console.log(`❌ FAIL: ${field.name} is empty`);
         } else if (
           ["number", "AlternateNumber", "fatherNumber", "motherNumber", "mobile"].includes(field.name) &&
           !mobileRegex.test(value)
         ) {
           message = "Please enter a valid 10-digit mobile number.";
+          console.log(`❌ FAIL: ${field.name} invalid mobile number`);
         } else if (field.name === "email" && !emailRegex.test(value)) {
           message = "Please enter a valid Gmail address (e.g., user@gmail.com)";
+          console.log(`❌ FAIL: ${field.name} invalid email format`);
+        } else {
+          console.log(`✅ PASS: ${field.name}`);
         }
 
         showError(field, message);
       }
-
 
       // ✅ Show green tick for file or select
       function showCheck(element) {
@@ -1421,16 +1418,16 @@
           (element.tagName === "SELECT" && element.value !== "")
         ) {
           tick.style.display = "inline";
+          console.log(`✅ PASS: ${element.name} file/dropdown selected`);
         } else {
           tick.style.display = "none";
+          console.log(`❌ FAIL: ${element.name} file/dropdown not selected`);
         }
       }
 
       // ✅ Show error messages
       function showError(field, message) {
         let errorElement = field.nextElementSibling;
-        console.log("showerror---");
-
 
         if (!errorElement || errorElement.tagName !== "SMALL") {
           errorElement = document.createElement("small");
@@ -1449,27 +1446,28 @@
         }
       }
 
-      // ✅ Modify nextStep() for full validation
+      // ✅ Step validation with debug logs
       window.nextStep = function (index) {
+        console.log(`\n===== VALIDATING STEP ${currentStep} =====`);
         const currentForm = steps[currentStep];
-        console.log("currentForm", currentForm)
         const fields = currentForm.querySelectorAll(
           "input[required], select[required], textarea[required]"
         );
-        console.log(fields);
+
+        console.log(`Fields in step ${currentStep}:`, fields);
 
         let isValid = true;
 
         fields.forEach((field) => {
           if (field.type === "file" || field.tagName === "SELECT") {
             showCheck(field);
-            // ✅ If file is required and not uploaded, mark invalid
             if (field.type === "file" && field.files.length === 0) {
               isValid = false;
+              console.log(`❌ FAIL: File missing for ${field.name}`);
             }
-            // ✅ If dropdown is required and not selected, mark invalid
             if (field.tagName === "SELECT" && field.value === "") {
               isValid = false;
+              console.log(`❌ FAIL: Dropdown not selected for ${field.name}`);
             }
           } else {
             validateField(field);
@@ -1478,51 +1476,51 @@
               field.nextElementSibling.textContent !== ""
             ) {
               isValid = false;
+              console.log(`❌ FAIL: Error message present for ${field.name}`);
             }
           }
         });
 
         // ✅ OTP check (Email & Mobile)
-        const emailOtpVerified = document.querySelector(
-          ".sendOtpButton.otp-verified"
-        );
-        const mobileOtpVerified = document.querySelector(
-          ".sendOtpButton.mobile-otp-verified"
-        );
+        const emailOtpVerified = document.querySelector(".sendOtpButton.otp-verified");
+        const mobileOtpVerified = document.querySelector(".sendOtpButton.mobile-otp-verified");
 
-        // ✅ If email and otp fields exist, check email OTP verification
-        if (
-          currentForm.querySelector("#email") &&
-          currentForm.querySelector("#otp")
-        ) {
+        if (currentForm.querySelector("#email") && currentForm.querySelector("#otp")) {
           if (!emailOtpVerified) {
             alert("❌ Please verify your Email OTP before continuing.");
+            console.log(`❌ FAIL: Email OTP not verified`);
             return;
           }
         }
 
-        // ✅ If mobile and otp fields exist, check mobile OTP verification
-        if (
-          currentForm.querySelector("#mobile-input") &&
-          currentForm.querySelector("#otp-input")
-        ) {
+        if (currentForm.querySelector("#mobile-input") && currentForm.querySelector("#otp-input")) {
           if (!mobileOtpVerified) {
             alert("❌ Please verify your Mobile OTP before continuing.");
+            console.log(`❌ FAIL: Mobile OTP not verified`);
             return;
           }
         }
 
         if (!isValid) {
           alert("❌ Please correct the errors before continuing.");
+          console.log(`❌ STEP ${currentStep} FAILED`);
           return;
         }
 
+        console.log(`✅ STEP ${currentStep} PASSED - Moving to STEP ${index}`);
         steps[currentStep].classList.remove("active");
         currentStep = index;
         steps[currentStep].classList.add("active");
       };
     });
   </script>
+
+
+
+
+  <!--from input validation  -->
+
+
 
 
 
